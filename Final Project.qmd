@@ -1,0 +1,657 @@
+---
+title: "Final Project: Data Science Culmination Project"
+author: "Josh Miller & Elijah Hill"
+format: html
+---
+
+```{r custom_theme, results = "hide"}
+library(tidyverse)
+styled <-
+  theme_bw() + 
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    legend.background = element_rect(
+      fill = "white", 
+      linewidth = 4, 
+      colour = "white"
+    ),
+    axis.ticks = element_line(colour = "grey70", linewidth = 0.2),
+    panel.grid.major = element_line(colour = "grey70", linewidth = 0.2),
+    panel.grid.minor = element_blank()
+  )
+```
+
+```{r packages, results = "hide"}
+library("tidymodels") ; theme_set(styled)
+library("janitor")
+library("olsrr")
+library("doParallel")
+library("dplyr")
+library("kernlab")
+library("rpart.plot")
+library("glmnet")
+library("GGally")
+library("cowplot")
+library("jtools")
+library("caret")
+```
+
+```{r cores}
+all_cores <- parallel::detectCores(logical = FALSE)
+cl <- makePSOCKcluster(all_cores)
+registerDoParallel(cl)
+```
+
+## Introduction:
+
+For our Final Project, the dataset we decided to use was titled Salary by Job Title and Country. We found the dataset from Kaggle.com.
+
+<https://www.kaggle.com/datasets/amirmahdiabbootalebi/salary-by-job-title-and-country/data>
+
+The dataset creator sourced this data from reputable employment websites and surveys, leaving out names and companies to ensure privacy for both parties.
+
+```{r dataset}
+Salary <- read_csv("Salary.csv")
+```
+
+There are 9 variables in the data, with 6684 observations. The variables are as follows: Age, Gender, Education Level, Job Title, Years of Experience, Salary, Country, Race, and Senior. Education level is encoded from 0-3, 0 meaning the employee has a high school diploma as their highest level of education, 1 meaning that they have a Bachelor's degree, 2 meaning they have a Master's, and 3 meaning they have a Doctorate's. The senior variable is a binary value indicating whether or not they have a senior-level position. Salary has been converted into USD for all countries for the sake of being on the same scale.
+
+```{r}
+head(Salary)
+```
+
+# Questions and Goals:
+
+Our main question we wanted to answer was "Can we accurately predict the salary of a job given the predictors in this data set", those being Age, Senior, Country, Race, Job Title, Gender, and Education Level. We also wanted to explore the roles each of the predictors play in determining Salary. Some secondary questions we asked to determine this during our EDA were: "Is one gender more often lower-paid than another?", "Does an increase in age usually lead to an increase in salary?", "How big a difference does a job being a senior position make on average to Salary?", and more to go along with that: "Are older people more likely to be the ones occupying senior positions?". Whether or not the Education Level or Country of the job seems to give access to a higher salary were also questions we asked and found answers to.
+
+# **Preprocessing:**
+
+For preprocessing, we quickly found 2 issues: First, we realized that certain job titles only appear once in the entire data set, one of the most notable being CEO. While this had one of the largest values for salary in the entire dataset, we realized that this would not only skew our EDA but would also cause problems for our testing and training splits later on. Therefore, we decided to drop them.
+
+We then found an issue with values that were likely misreported within the dataset. Upon analyzing the bottom-most values for annual salary in the dataset, we found multiple employees reported only making 3 figures with jobs that in every other case paid well above that, such as Software Engineer Manager. We could be making a large assumption here that this was a full-time position being paid a yearly salary, but even if these values were correctly recorded, it would still be inconsistent with the rest of the dataset and cause a skew in the lowest-paying jobs.
+
+```{r}
+##PREPROCESSING
+
+#removing any job only included once 
+Salary_cleaned <- Salary %>%
+  group_by(`Job Title`) %>%
+  mutate(
+    count = n()
+  ) %>%
+  filter(count > 1) %>%
+  ungroup() %>%
+  select(-count)
+#dropping probable mistaken entries (reported less than 1k salaries)
+Salary_cleaned <- Salary_cleaned %>%
+  arrange(Salary) %>%
+  filter(!row_number() %in% c(1,2,3,4))
+```
+
+# **EDA:**
+
+## Exploring Gender:
+
+We wanted to explore if Females still earned less than men on average, as they have historically, so we first looked at a general average of all salaries of men versus those of women.
+
+```{r}
+#EDA (Gender)
+
+##GENDER DIFFERENCES
+Salary_cleaned_by_gender <- Salary_cleaned %>%
+  group_by(Gender) %>%
+    summarize(Mean = mean(Salary, na.rm = TRUE))
+#On average, women earn less than men
+
+Salary_cleaned_by_gender
+```
+
+This table shows a sizable difference (about 19000) in the average salary of a male over one of a female, supporting our initial theory. We then split up the data to more deeply delve into the differences in pay between the two Genders.
+
+```{r}
+#Splitting salary into male and female
+salary_male <- Salary_cleaned %>%
+  group_by(Gender) %>%
+    filter(Gender == "Male")
+
+salary_female <- Salary_cleaned %>%
+  group_by(Gender) %>%
+    filter(Gender == "Female")
+```
+
+After splitting the data, we tried making four plots showing the top 15 highest-salary jobs and the bottom 15 lowest-salary jobs for comparison.
+
+```{r}
+# #comparing highest/lowest earning male/female jobs
+#  top_male_salaries <- salary_male %>%
+#  arrange(desc(Salary)) %>%
+#    slice(1:15)
+#  
+#  #ignoring mistaken entries (1 and 2 row)
+#  bottom_male_salaries <- salary_male %>%
+#  arrange(Salary) %>%
+#    slice(3:17)
+#  
+#  top_female_salaries <- salary_female %>%
+#  arrange(desc(Salary)) %>%
+#  slice(1:15)
+#  
+# #ignoring mistaken entries (1 and 2 row)
+#  bottom_female_salaries <- salary_female %>%
+#  arrange(Salary) %>%
+#    slice(3:17)
+
+#plots
+#tms_plot <- ggplot(top_male_salaries, aes(x = Salary)) +       #geom_bar(fill = "blue") +
+#theme_light()
+
+#bms_plot <- ggplot(bottom_male_salaries, aes(x = Salary)) +
+# geom_bar(fill = "turquoise2") +
+# theme_dark()
+
+#the above plots don't look good...
+#they are mostly the same jobs
+
+#trying again but with...
+```
+
+the above plots don't look good... they are mostly the same jobs trying again but with averaging jobs with the same title together.
+
+Upon making the first few plots, we realized that the above plots did not look good as they were mostly showing the same job titles' salaries repeated multiple times. We remade the graphs but this time combined the job titles to eliminate repeated Job Titles. First, we made new tables to use with a new Average_Salary column for each job title, then eliminated other columns and rows besides unique Average_Salaries and Job Titles since those were what we were focusing on.
+
+```{r}
+#averaging jobs with the same title together
+salary_male_unique <- salary_male %>%
+  group_by(`Job Title`) %>%
+  mutate(Average_Salary = mean(Salary)) %>%
+  distinct(Average_Salary)
+  
+salary_female_unique <- salary_female %>%
+  group_by(`Job Title`) %>%
+  mutate(Average_Salary = mean(Salary)) %>%
+  distinct(Average_Salary)
+
+salary_male_unique
+salary_female_unique
+```
+
+```{r}
+#comparing highest/lowest earning male/female jobs
+top_male_salaries_unique <- 
+  salary_male_unique %>%
+  ungroup() %>% arrange(desc(Average_Salary)) %>% slice(1:10)
+
+bottom_male_salaries_unique <- 
+  salary_male_unique %>%
+  ungroup() %>% 
+  arrange(Average_Salary) %>% 
+  slice(1:10)
+
+top_female_salaries_unique <- 
+  salary_female_unique %>%
+  ungroup() %>% 
+  arrange(desc(Average_Salary)) %>% slice(1:10)
+
+bottom_female_salaries_unique <- 
+  salary_female_unique %>%
+  ungroup %>%
+  arrange(Average_Salary) %>%
+    slice(1:10)
+
+top_male_salaries_unique 
+bottom_male_salaries_unique
+top_female_salaries_unique
+bottom_female_salaries_unique
+```
+
+We made the plots again, making sure to standardize the x-axis values to more clearly show any differences in pay. We made male plots blue, and female red, top salary plots have a light theme, and bottom salary plots use the dark theme to differentiate and help show the comparisons we were looking for.
+
+```{r}
+tms_plot <- ggplot(top_male_salaries_unique, aes(x = Average_Salary)) +
+    geom_histogram(fill = "blue") + 
+    labs(y = "Job Count", x = "Average Salary (Male)") +
+    xlim(150000, 250000)
+```
+
+```{r}
+bms_plot <- ggplot(bottom_male_salaries_unique, aes(x = Average_Salary)) +
+    geom_histogram(fill = "turquoise2", bins = 40) +
+    labs(y = "Job Count", x = "Average Salary (Male)") +
+    xlim(24000, 58000)+ ylim(0, 3) + theme_dark()
+```
+
+```{r}
+tfs_plot <- ggplot(top_female_salaries_unique, aes(x = Average_Salary)) +
+    geom_histogram(fill = "red") +
+    labs(y = "Job Count", x = "Average Salary (Female)") +
+    xlim(150000, 250000)
+```
+
+```{r}
+bfs_plot <- ggplot(bottom_female_salaries_unique, aes(x = Average_Salary)) +
+    geom_histogram(fill = "lightcoral") +
+    labs(y = "Job Count", x = "Average Salary (Female)") +
+    xlim(24000, 58000) + ylim(0, 3) + theme_dark()
+```
+
+We used the "cowplot" package to easily combine all four plots into one graphic for a more complete visual comparison of gender salary differences on the poles of the data.
+
+```{r}
+plot_grid(tms_plot, bms_plot, tfs_plot, bfs_plot, nrow = 2, ncol = 2)
+```
+
+After doing this, we realized that we could do almost the same thing, but in a broader sense (as well as faster), by just using a box plot.
+
+```{r}
+#comparing all salaries
+ggplot(Salary_cleaned, aes(x = Salary, y = Gender)) +
+    geom_boxplot(aes(
+        fill = as.factor(`Gender`))) +
+    scale_color_manual(values = c("blue", "red")) +
+    theme(legend.position = "none")
+```
+
+The box plots, as well as the four plots prior, all point to what we had guessed which was that males do indeed earn higher salaries than females on average.
+
+## Exploring Education Level:
+
+Next, we examined the role education level played on salary amount. This time, we started with the general plot comparing all salaries grouped by Education Level, then moved on to showing the average salary of each Education Level after that.
+
+```{r}
+#EDA (Education Level)
+
+ggplot(Salary_cleaned, aes(y = Salary,
+                           x = as.factor(`Education Level`),
+                           fill = as.factor(`Education Level`
+                                            )))+
+    scale_color_manual(values = c("red", "green", "yellow", "darkorchid3")) +
+    labs(x = "Education Level") + 
+    geom_boxplot() +
+    theme(legend.position = "none")
+
+salary_by_ed_lvl <- Salary_cleaned %>%
+  group_by(`Education Level`) %>%
+  summarize(Mean = mean(Salary))
+
+ggplot(salary_by_ed_lvl, aes(x = `Education Level`,
+                             y = Mean,
+                             fill = as.factor(
+                                 `Education Level`
+                                 ))) +
+    scale_color_manual(values = c("red", "green", "yellow", "darkorchid3" )) + 
+    labs(y = "Mean Salary") +
+    geom_col() +
+    theme(legend.position = "none")
+```
+
+We were pleased to see not only that the data seemed to indicate that going to college is indeed still worth it, but that the data was nice and linear as well for both the raw and the average salary by education level comparisons.
+
+## Exploring Age and Seniority:
+
+Age and Seniority were two predictors we were especially excited to look at, and we had high expectations on the strength of the correlation between them and the salaries those of high age and in senior positions would hold. Once again, we showed a general plot using the raw salary data when compared with Age, this time using whether or not the job holder had the Senior status to determine the color of the plot point. After getting a nice-looking scatter plot from that (and being very happy with the color palette), we could see that there was some positive correlation between the age of a person, whether or not they would be in a senior position, and their salary. To get a slightly different perspective, we grouped the ages by decade and compared each Age Group's average salary to each other, and were once again satisfied to see a seemingly linear relationship between Age and Salary.
+
+```{r}
+#EDA (Age/Seniority)
+ggplot(Salary_cleaned, aes(y = Salary, x = Age, color = as.factor(Senior))) +
+    scale_color_manual(values = c("ivory4", "goldenrod"),
+                       labels = c("Non-Senior Position", 
+                                  "Senior")) +
+    labs(color = "Seniority") + geom_point()
+
+salary_by_age <- Salary_cleaned %>%
+  mutate(Age_Group = case_when(
+    Age < 30 ~ "29 & Younger",
+    Age < 40 & Age >= 30 ~ "30's",
+    Age < 50 & Age >= 40 ~ "40's",
+    Age < 60 & Age >= 50 ~ "50's",
+    Age >= 60 ~ "60 & Older"
+  )) %>% 
+  group_by(Age_Group) %>%
+  summarize(Average_Salary = mean(Salary))
+
+ggplot(salary_by_age, aes(x = Age_Group,
+                          y = Average_Salary,
+                          fill = as.factor(Age_Group)),) +
+    scale_fill_manual(values = c("ivory4","grey",
+                                 "lightgoldenrod2",
+                                 "goldenrod2",
+                                 "goldenrod3")) +
+    geom_col() +
+    theme(legend.position = "none",
+                       panel.background = element_rect(fill = "slategray3")) +
+    labs(x = "Age Group", y = "Average Salary")
+```
+
+## Exploring Country and Race:
+
+The first thing we did to look at Country and Race was to use multilevel grouping to get a better understanding of the demographics of the data. After noting the variety of Races in each Country, we proceeded to make a violin plot comparing the Salaries of those living in different Countries. That plot did not look great, so we reverted to using box plots for comparing Races' Salary earnings. The main takeaway we received from these two plots was that the Country and Race of a person do not seem to be significant factors in determining one's salary.
+
+```{r}
+#EDA (Country/Race)
+Salary_cleaned %>% 
+  group_by(Country, Race) %>%
+  summarize(count = n())
+
+ggplot(Salary_cleaned, aes(x = Salary, y = Country, fill = as.factor(Country))) + 
+    scale_fill_manual(values = c("red", "white", "gold", "purple", "blue")) +
+    geom_violin() +
+    theme(legend.position = "none")
+
+ggplot(Salary_cleaned, aes(x = Salary, y = Race, color =  as.factor(Race))) +
+    geom_boxplot() +
+    theme(legend.position = "none")
+
+```
+
+## Exploring Job Title:
+
+When thinking of what to explore with Job Titles, we were at first a little unsure of what to compare, since there were so many unique Job Titles in the data. We ended up simply making a table of the top 10 highest-salary jobs and the "top 10" lowest-salary jobs.
+
+```{r}
+#EDA (Job Title)
+#hrm...
+salary_by_job_title <- Salary_cleaned %>%
+  group_by(`Job Title`) %>%
+  mutate(Average_Salary = mean(Salary)) %>%
+  distinct(Average_Salary)
+
+top_jobs <- salary_by_job_title %>%
+  ungroup() %>%
+  arrange(desc(Average_Salary)) %>%
+  slice(1:10)
+
+worst_jobs <- salary_by_job_title %>%
+  ungroup() %>%
+  arrange(Average_Salary) %>%
+  slice(1:10)
+
+top_jobs
+worst_jobs
+```
+
+One interesting thing that we could see from these tables is that Job Titles with "Director" and "Engineer" are featured frequently in the higher end of the Salary data. This could either be an insight into the types of jobs that give high Salaries, or the types of jobs that the data was scraped from. Either way, the wide range of names meant that job titles were most likely going to be largely ineffective as a predictor for our models.
+
+# Modeling:
+
+Now that we have gathered some insights about this data as well as having answered our minor questions from our exploratory analysis, we will use modeling to answer our main question.
+
+Before we get into creating the models, we will split the salary dataset into a training and testing data frame, using a 90/10 proportion respectively.
+
+```{r}
+salary_split <- initial_split(Salary_cleaned, prop = 0.90)
+training <-training(salary_split)
+testing <- testing(salary_split)
+```
+
+To create a ridge regression model, we need to turn all of our datasets into numeric factors. We will get to the ridge regression model later. This is simply up here for rendering reasons.
+
+```{r}
+ridge_salary <- Salary_cleaned %>%
+  transform(.,
+                   Race = as.numeric(as.factor(Race)),
+                   Country = as.numeric(as.factor(Country)),
+                   `Job Title` = as.numeric(as.factor(`Job Title`)),
+                   Gender = as.numeric(as.factor(Gender)))
+ridge_split <- initial_split(ridge_salary, prop = .90)
+train <- training(ridge_split)
+test <- testing(ridge_split)
+
+```
+
+## Multiple Linear Regression:
+
+Now that we split the data into training and testing, we will create our first model: a multiple linear regression model. A multiple linear regression model is simple, yet it can still give a good benchmark for comparisons to our other models.
+
+```{r}
+fit <- lm(Salary ~ ., data = training)
+summary(fit)
+```
+
+As we can see, the most significant predictors are education level, years of experience, and senior, all of which make sense as it is logical that the more years of experience you have in a profession and the higher level of education you have, the more likely you are going to earn more money than someone who has less experience and a lesser degree. Seniority also makes sense as a senior-level position undoubtedly has more responsibilities than someone who isn't. However, we can see that several job title codes are good indicators. Jobs such as software engineer, research scientist, research director, product manager, and data scientist/analyst all appear to be very good predictors for our model. This may well be because there are simply more observations of these job titles in the data set, but all of these fields are certainly very highly-paying positions. Now, to look at the results. We can see that the model generated an R-squared value of .82, on an F-stat of 296.3, and a p-value of \<2.2e-16, so needless to say, this is a respectable model; it is not perfect, but there is a strong positive correlation between the predictors and Salary.
+
+Before we go any further, we should check the assumptions of our model to see if this dataset even can be fitted into a linear model.
+
+```{r}
+par(mfrow = c(2,2))
+plot(fit)
+```
+
+Checking the normal assumptions of linear regression, we can see that the data appears to fit to an acceptable level. The residuals vs. Fitted values graph is distributed mostly evenly from end to end, and the Q-Q Residuals plot, while both tails do slightly veer off the mean, they do at least mirror each other.
+
+Now let us fit this model into our testing data. As you can see, we bound the predicted outcomes onto the testing dataset so we can compare the predicted value to the employee's actual salary.
+
+```{r}
+lm_preds <- predict(fit, testing) %>%
+  bind_cols(testing)
+lm_preds
+```
+
+While the predictions are not perfect, the model does get rather close to predicting the salary of some employees, with some predictions getting even within 1000 dollars of the actual value. However, it is not perfect, so let's tune the model to see if we can improve the accuracy.
+
+Let us try to optimize the model by running a step-forward selection model to see what variables it would choose to use.
+
+```{r}
+ols_step_forward_p(fit)
+```
+
+Unsurprisingly, the summary has chosen the variables that I had highlighted in the original model. Interestingly, this model scraps Gender, Race, and Country; it does not consider them strong enough to influence the model.
+
+Now that we've figured out the ideal variables for the model, let's create a new model to see if we can improve the accuracy by removing unnecessary predictors:
+
+```{r}
+step_fit <- 
+    lm(Salary ~ Age + `Education Level` +
+           `Years of Experience` + Senior + 
+           `Job Title`, data = training)
+summary(step_fit)
+```
+
+Unfortunately, Rsq remained nearly the same. However, one saving grace of the tune is that we were able to slightly reduce residual standard error and increase our F-statistic, so it may not look like it at first glance, but the model is still stronger than our initial attempt, even if only slightly.
+
+Now that we've tuned our model, let us visualize the predictions.
+
+This first plot depicts the average predicted value of Salary at each age in the data.
+
+```{r}
+effect_plot(step_fit, pred = Age)
+```
+
+As we can see, this shows a very strong correlation between salary and age.
+
+This second plot once again depicts salary vs age, but this time plots the residual values along with showing the confidence interval of which the model operates. We can see most of our residuals lie within the interval, although there are a few outliers at both ends.
+
+```{r}
+effect_plot(step_fit, pred = Age, interval = TRUE, partial.residuals = TRUE)
+```
+
+## Tree Methods:
+
+For our second model, we want to use the power of Tree methods to see if it could give us a better answer to our main question than multiple linear regression. We will be mainly focusing on the Decision Tree method, but we will also create a Random Forest tree for comparison.
+
+### Decision Tree:
+
+As we learned from class, we know that decision trees can mirror human decision-making more than other methods. We want to try to put this to the test to create a decision tree model based on our salary data to see if it can accurately predict an employee's salary using binary decision-making.
+
+To begin, we will make an untidy decision tree to visualize the decision-making process the model will take to determine salary.
+
+```{r}
+# Non-tidy way (for visualization purposes)
+tree_fit <- rpart(Salary ~., data = train)
+
+rpart.plot(tree_fit)
+```
+
+We can see from this output that Years of Experience and job titles are very influential in decision-making. To be able to print this tree without having tens of job names crowd out the actual Boolean expression, we coded the job title to be a numeric value and factorized it, so while it's a bit harder to understand what is happening, the lower a job title's value is, the less money the position makes. Back to the tree, we can see that the longer someone works, the more money they will earn, and there are no questions about what position they will hold; they will still earn more money due to their experience. However, when we go down the tree in the opposite direction (meaning an employee has less experience), their position starts to play a more pivotal role.
+
+Below we can see the decision tree model fitted onto the testing data. We can also see the predicted values compared to the actual salary values.
+
+```{r}
+tree_fit_2 <- rpart(Salary ~., data = training)
+tree_preds <- predict(tree_fit_2, newdata = testing) %>%
+  bind_cols(testing)
+tree_preds
+```
+
+While the predictions appear to be fairly accurate to the actual values, we can see that the model is not good at predicting small changes within similar records. Therefore, we need to tune for it to factor in these smaller changes into the data.
+
+```{r}
+# Tidy way + tuning   
+tree_model <- decision_tree(mode = "regression",
+                            cost_complexity = tune(),
+                            tree_depth = tune()) %>%
+  set_engine("rpart")
+
+
+data_recipe <- recipe(Salary ~., training)
+
+wf <- workflow() %>%
+  add_recipe(data_recipe) %>%
+  add_model(tree_model)
+
+tree_grid <- grid_regular(cost_complexity(),
+                          tree_depth(),
+                          levels = 5)
+
+cv_samples <- vfold_cv(training)
+
+tree_tune <- wf %>%
+  tune_grid(
+    resamples = cv_samples,
+    grid = tree_grid
+  )
+
+best_tree <- tree_tune %>%
+  select_best(metric = "rmse")
+
+final_wf <- wf %>%
+  finalize_workflow(best_tree)
+  
+
+final_wf %>%
+  last_fit(salary_split) %>%
+  collect_metrics() 
+
+tuned_tree_preds <- final_wf %>%
+  last_fit(salary_split) %>%
+  collect_predictions() %>%
+  bind_cols(testing)
+```
+
+As we can see from the output of the tuned decision tree above, we get an r-squared value of .958, which is an incredible accuracy considering decision trees often suffer from low predictive power. However, our RMSE value is at a staggering 10491.67, so our outliers are heavily impacting the model in a negative way, which is usually the case for Decision Trees.
+
+```{r}
+tuned_tree_preds
+```
+
+Looking at our predicted values now, we can see that the model is way more accurate at factoring in slight differences between similar employees. Overall, this tuned regression decision tree does a really good job of making accurate predictions.
+
+### Random Forest Tree:
+
+For comparison, let us look at this Random Forest Tree
+
+```{r}
+rf_model <- rand_forest() %>% 
+    set_engine("ranger") %>% 
+    set_mode("regression")
+
+# workflow
+rf_wf <- workflow() %>% 
+    add_model(rf_model) %>% 
+    add_recipe(data_recipe)
+
+# fit the regression tree
+rf_fit <- rf_wf %>% fit(training)
+
+# predict
+testing$pred <- predict(rf_fit, testing)$.pred
+
+# metrics
+testing %>% metrics(Salary, pred)
+
+
+```
+
+The Random Forest tree did ever so slightly worse than the tuned decision tree model, but it still is very accurate at predicting salary.
+
+## Ridge Regression:
+
+We chose ridge regression as our final model in the hopes that we could reduce the high amount of variance in our data to create an even more accurate model than our tuned Decision Tree.
+
+Let us start with a ridge model that we manually assign the penalties for. Let us use a manual penalty of 4 for the estimate. We must also center and scale all of our predictors to standardize them before we fit the model.
+
+```{r}
+ridge_recipe <- recipe(Salary ~ ., data = train) %>%
+  step_center(all_nominal_predictors()) %>%
+  step_scale(all_nominal_predictors())
+
+
+ridge_model <- linear_reg(mixture = 0, penalty = .1) %>%
+  set_engine("glmnet")
+
+ridge_wf <- workflow() %>%
+  add_recipe(ridge_recipe) %>%
+  add_model(ridge_model) %>%
+  fit(train)
+extract_fit_parsnip(ridge_wf) %>% tidy(penalty = 4)
+```
+
+From the output of the model, we can tell that it is not very accurate at all. The estimated values are extremely far away from zero.
+
+Now, let us try tuning the model to see if we can improve the accuracy of the ridge regression.
+
+```{r}
+## TUNING
+folds <-vfold_cv(train)
+
+model <- linear_reg(mixture = 0, penalty = tune()) %>%
+  set_engine("glmnet")
+
+tuned_wf <- workflow() %>%
+  add_recipe(ridge_recipe) %>%
+  add_model(ridge_model)
+
+ridge_grid <- grid_regular(mixture(), penalty(), levels = 10)
+
+tuned_grid <- tune_grid(tuned_wf, resamples = folds, grid = ridge_grid)
+tuned_grid %>% collect_metrics() %>% filter(.metric == "rmse") %>% arrange(mean)
+```
+
+The RMSE is almost three times larger than our decision tree model. It appears this model is not accurate at all at predicting salary.
+
+Before we make any assumptions, let us take a look at the predictions
+
+```{r}
+tuned_grid %>% 
+    select_best() %>% 
+    finalize_workflow(tuned_wf, .) %>% 
+    last_fit(ridge_split) %>% 
+    collect_predictions()
+```
+
+Our tuned ridge regression model overestimates salary for every employee. It is now safe to say that this model is the least accurate out of the three that we have created today.
+
+# Comparison:
+
+To compare our models, our decision tree by far did the best, as we have previously stated, but our multiple linear regression model was still respectable, being able to predict accurately within 82% of the data. Now for the ridge regression model. Our ridge regression model was not accurate even after being scaled, centered, and tuned. We are led to believe that this may have been due to the extremely large variance within the dataset.
+
+# Conclusion:
+
+In conclusion, we were able to answer all of our questions after analyzing and modeling the data.
+
+Starting with our minor questions:
+
+-   Women do, in fact, get paid less than men; while men do have lower-paying jobs than women, on average their jobs are likely to pay less than a man's.
+
+-   Age does play a large role in how much an employee earns. experience and age go hand in hand with one another, as you are going to gain experience as you age (unless you are unemployed or start work later than the average person). Still, being older in your field almost certainly leads to better pay. We did find, however, that 60-year-olds make about the same as 50-year-olds do on average. So do not anticipate a pay raise heading into your pre-retirement years
+
+-   Having a senior-level position does indeed lead to a pay increase on average, and while we found a handful of outliers under 30, most employees in a senior-level position were older than this mark.
+
+-   Having a higher level of education does lead to a higher salary, and quite significantly so. We would hope this would be the case considering the amount of time and resources it takes to get each higher level of education.
+
+-   No, you do not need to move to another country to get a better wage. While there may be other reasons (such as benefits) to entice you to move abroad, salary should not be one of them.
+
+To finish off this project, let us answer our main question: Can we accurately predict the salary of an employee given the predictors from the dataset?
+
+The answer to this question is yes. Using a tuned decision tree model we were able to achieve an accuracy of 95% on our testing data. The model is not entirely perfect, but it is certainly good for the fact that it is predicting using regression, which is extremely hard to achieve good accuracy for.
+
+To say the accuracy of our decision tree was a surprise would be an understatement. Considering the relatively small amount of variables within the data set we thought we would not be able to accurately predict salary, so to create such an accurate model was a pleasant surprise for us.

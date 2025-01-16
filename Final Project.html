@@ -1,0 +1,2182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Josh Miller &amp; Elijah Hill">
+
+<title>Final Project: Data Science Culmination Project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Final Project_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Final Project_files/libs/quarto-html/quarto.js"></script>
+<script src="Final Project_files/libs/quarto-html/popper.min.js"></script>
+<script src="Final Project_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Final Project_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Final Project_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Final Project_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Final Project_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Final Project_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Final Project_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Final Project: Data Science Culmination Project</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Josh Miller &amp; Elijah Hill </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>styled <span class="ot">&lt;-</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.background =</span> <span class="fu">element_rect</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> <span class="st">"white"</span>, </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">linewidth =</span> <span class="dv">4</span>, </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">colour =</span> <span class="st">"white"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"grey70"</span>, <span class="at">linewidth =</span> <span class="fl">0.2</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"grey70"</span>, <span class="at">linewidth =</span> <span class="fl">0.2</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidymodels"</span>) ; <span class="fu">theme_set</span>(styled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ────────────────────────────────────── tidymodels 1.2.0 ──</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>✔ broom        1.0.7     ✔ rsample      1.2.1
+✔ dials        1.3.0     ✔ tune         1.2.1
+✔ infer        1.0.7     ✔ workflows    1.1.4
+✔ modeldata    1.4.0     ✔ workflowsets 1.1.0
+✔ parsnip      1.2.1     ✔ yardstick    1.3.1
+✔ recipes      1.1.0     </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+✖ scales::discard() masks purrr::discard()
+✖ dplyr::filter()   masks stats::filter()
+✖ recipes::fixed()  masks stringr::fixed()
+✖ dplyr::lag()      masks stats::lag()
+✖ yardstick::spec() masks readr::spec()
+✖ recipes::step()   masks stats::step()
+• Search for functions across packages at https://www.tidymodels.org/find/</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"janitor"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'janitor'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    chisq.test, fisher.test</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"olsrr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'olsrr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:datasets':
+
+    rivers</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"doParallel"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: foreach</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'foreach'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:purrr':
+
+    accumulate, when</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: iterators</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: parallel</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"kernlab"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'kernlab'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:scales':
+
+    alpha</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    cross</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ggplot2':
+
+    alpha</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"rpart.plot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: rpart</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'rpart'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dials':
+
+    prune</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"glmnet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'Matrix'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:tidyr':
+
+    expand, pack, unpack</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loaded glmnet 4.1-8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"GGally"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'GGally':
+  method from   
+  +.gg   ggplot2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"cowplot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'cowplot'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:lubridate':
+
+    stamp</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"jtools"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'jtools'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:yardstick':
+
+    get_weights</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"caret"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'caret'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:yardstick':
+
+    precision, recall, sensitivity, specificity</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    lift</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>all_cores <span class="ot">&lt;-</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>(<span class="at">logical =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">makePSOCKcluster</span>(all_cores)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(cl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction:</h2>
+<p>For our Final Project, the dataset we decided to use was titled Salary by Job Title and Country. We found the dataset from Kaggle.com.</p>
+<p><a href="https://www.kaggle.com/datasets/amirmahdiabbootalebi/salary-by-job-title-and-country/data" class="uri">https://www.kaggle.com/datasets/amirmahdiabbootalebi/salary-by-job-title-and-country/data</a></p>
+<p>The dataset creator sourced this data from reputable employment websites and surveys, leaving out names and companies to ensure privacy for both parties.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>Salary <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Salary.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 6684 Columns: 9
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (4): Gender, Job Title, Country, Race
+dbl (5): Age, Education Level, Years of Experience, Salary, Senior
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<p>There are 9 variables in the data, with 6684 observations. The variables are as follows: Age, Gender, Education Level, Job Title, Years of Experience, Salary, Country, Race, and Senior. Education level is encoded from 0-3, 0 meaning the employee has a high school diploma as their highest level of education, 1 meaning that they have a Bachelor’s degree, 2 meaning they have a Master’s, and 3 meaning they have a Doctorate’s. The senior variable is a binary value indicating whether or not they have a senior-level position. Salary has been converted into USD for all countries for the sake of being on the same scale.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Salary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 9
+    Age Gender `Education Level` `Job Title`       `Years of Experience` Salary
+  &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt; &lt;chr&gt;                             &lt;dbl&gt;  &lt;dbl&gt;
+1    32 Male                   1 Software Engineer                     5  90000
+2    28 Female                 2 Data Analyst                          3  65000
+3    45 Male                   3 Manager                              15 150000
+4    36 Female                 1 Sales Associate                       7  60000
+5    52 Male                   2 Director                             20 200000
+6    29 Male                   1 Marketing Analyst                     2  55000
+# ℹ 3 more variables: Country &lt;chr&gt;, Race &lt;chr&gt;, Senior &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="questions-and-goals" class="level1">
+<h1>Questions and Goals:</h1>
+<p>Our main question we wanted to answer was “Can we accurately predict the salary of a job given the predictors in this data set”, those being Age, Senior, Country, Race, Job Title, Gender, and Education Level. We also wanted to explore the roles each of the predictors play in determining Salary. Some secondary questions we asked to determine this during our EDA were: “Is one gender more often lower-paid than another?”, “Does an increase in age usually lead to an increase in salary?”, “How big a difference does a job being a senior position make on average to Salary?”, and more to go along with that: “Are older people more likely to be the ones occupying senior positions?”. Whether or not the Education Level or Country of the job seems to give access to a higher salary were also questions we asked and found answers to.</p>
+</section>
+<section id="preprocessing" class="level1">
+<h1><strong>Preprocessing:</strong></h1>
+<p>For preprocessing, we quickly found 2 issues: First, we realized that certain job titles only appear once in the entire data set, one of the most notable being CEO. While this had one of the largest values for salary in the entire dataset, we realized that this would not only skew our EDA but would also cause problems for our testing and training splits later on. Therefore, we decided to drop them.</p>
+<p>We then found an issue with values that were likely misreported within the dataset. Upon analyzing the bottom-most values for annual salary in the dataset, we found multiple employees reported only making 3 figures with jobs that in every other case paid well above that, such as Software Engineer Manager. We could be making a large assumption here that this was a full-time position being paid a yearly salary, but even if these values were correctly recorded, it would still be inconsistent with the rest of the dataset and cause a skew in the lowest-paying jobs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="do">##PREPROCESSING</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co">#removing any job only included once </span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>Salary_cleaned <span class="ot">&lt;-</span> Salary <span class="sc">%&gt;%</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Job Title</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>()</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(count <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>count)</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="co">#dropping probable mistaken entries (reported less than 1k salaries)</span></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>Salary_cleaned <span class="ot">&lt;-</span> Salary_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Salary) <span class="sc">%&gt;%</span></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">row_number</span>() <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="eda" class="level1">
+<h1><strong>EDA:</strong></h1>
+<section id="exploring-gender" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-gender">Exploring Gender:</h2>
+<p>We wanted to explore if Females still earned less than men on average, as they have historically, so we first looked at a general average of all salaries of men versus those of women.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA (Gender)</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="do">##GENDER DIFFERENCES</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>Salary_cleaned_by_gender <span class="ot">&lt;-</span> Salary_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">Mean =</span> <span class="fu">mean</span>(Salary, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="co">#On average, women earn less than men</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>Salary_cleaned_by_gender</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  Gender    Mean
+  &lt;chr&gt;    &lt;dbl&gt;
+1 Female 107981.
+2 Male   121503.</code></pre>
+</div>
+</div>
+<p>This table shows a sizable difference (about 19000) in the average salary of a male over one of a female, supporting our initial theory. We then split up the data to more deeply delve into the differences in pay between the two Genders.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Splitting salary into male and female</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>salary_male <span class="ot">&lt;-</span> Salary_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Gender <span class="sc">==</span> <span class="st">"Male"</span>)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>salary_female <span class="ot">&lt;-</span> Salary_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Gender <span class="sc">==</span> <span class="st">"Female"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After splitting the data, we tried making four plots showing the top 15 highest-salary jobs and the bottom 15 lowest-salary jobs for comparison.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># #comparing highest/lowest earning male/female jobs</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  top_male_salaries &lt;- salary_male %&gt;%</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  arrange(desc(Salary)) %&gt;%</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="co">#    slice(1:15)</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  </span></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  #ignoring mistaken entries (1 and 2 row)</span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  bottom_male_salaries &lt;- salary_male %&gt;%</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  arrange(Salary) %&gt;%</span></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a><span class="co">#    slice(3:17)</span></span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  </span></span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  top_female_salaries &lt;- salary_female %&gt;%</span></span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  arrange(desc(Salary)) %&gt;%</span></span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  slice(1:15)</span></span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  </span></span>
+<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a><span class="co"># #ignoring mistaken entries (1 and 2 row)</span></span>
+<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  bottom_female_salaries &lt;- salary_female %&gt;%</span></span>
+<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  arrange(Salary) %&gt;%</span></span>
+<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a><span class="co">#    slice(3:17)</span></span>
+<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a><span class="co">#plots</span></span>
+<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a><span class="co">#tms_plot &lt;- ggplot(top_male_salaries, aes(x = Salary)) +       #geom_bar(fill = "blue") +</span></span>
+<span id="cb56-22"><a href="#cb56-22" aria-hidden="true" tabindex="-1"></a><span class="co">#theme_light()</span></span>
+<span id="cb56-23"><a href="#cb56-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-24"><a href="#cb56-24" aria-hidden="true" tabindex="-1"></a><span class="co">#bms_plot &lt;- ggplot(bottom_male_salaries, aes(x = Salary)) +</span></span>
+<span id="cb56-25"><a href="#cb56-25" aria-hidden="true" tabindex="-1"></a><span class="co"># geom_bar(fill = "turquoise2") +</span></span>
+<span id="cb56-26"><a href="#cb56-26" aria-hidden="true" tabindex="-1"></a><span class="co"># theme_dark()</span></span>
+<span id="cb56-27"><a href="#cb56-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-28"><a href="#cb56-28" aria-hidden="true" tabindex="-1"></a><span class="co">#the above plots don't look good...</span></span>
+<span id="cb56-29"><a href="#cb56-29" aria-hidden="true" tabindex="-1"></a><span class="co">#they are mostly the same jobs</span></span>
+<span id="cb56-30"><a href="#cb56-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-31"><a href="#cb56-31" aria-hidden="true" tabindex="-1"></a><span class="co">#trying again but with...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>the above plots don’t look good… they are mostly the same jobs trying again but with averaging jobs with the same title together.</p>
+<p>Upon making the first few plots, we realized that the above plots did not look good as they were mostly showing the same job titles’ salaries repeated multiple times. We remade the graphs but this time combined the job titles to eliminate repeated Job Titles. First, we made new tables to use with a new Average_Salary column for each job title, then eliminated other columns and rows besides unique Average_Salaries and Job Titles since those were what we were focusing on.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">#averaging jobs with the same title together</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>salary_male_unique <span class="ot">&lt;-</span> salary_male <span class="sc">%&gt;%</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Job Title</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Average_Salary =</span> <span class="fu">mean</span>(Salary)) <span class="sc">%&gt;%</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Average_Salary)</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>salary_female_unique <span class="ot">&lt;-</span> salary_female <span class="sc">%&gt;%</span></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Job Title</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Average_Salary =</span> <span class="fu">mean</span>(Salary)) <span class="sc">%&gt;%</span></span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Average_Salary)</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>salary_male_unique</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 61 × 2
+# Groups:   Job Title [61]
+   `Job Title`                    Average_Salary
+   &lt;chr&gt;                                   &lt;dbl&gt;
+ 1 Sales Associate                        33515.
+ 2 Delivery Driver                        28000 
+ 3 Sales Representative                   46444.
+ 4 Digital Marketing Manager              75968.
+ 5 HR Generalist                          72776.
+ 6 HR Coordinator                         34667.
+ 7 Accountant                             53750 
+ 8 Software Developer                     68011.
+ 9 Business Development Associate         38333.
+10 Operations Analyst                     69167.
+# ℹ 51 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>salary_female_unique</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 67 × 2
+# Groups:   Job Title [67]
+   `Job Title`                     Average_Salary
+   &lt;chr&gt;                                    &lt;dbl&gt;
+ 1 Sales Associate                         28207.
+ 2 Sales Representative                    35833.
+ 3 Receptionist                            25000 
+ 4 HR Coordinator                          41062.
+ 5 Customer Service Representative         33333.
+ 6 HR Generalist                           48855.
+ 7 Juniour HR Coordinator                  32000 
+ 8 Marketing Analyst                       63083.
+ 9 Business Development Associate          42500 
+10 Operations Manager                      95200 
+# ℹ 57 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co">#comparing highest/lowest earning male/female jobs</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>top_male_salaries_unique <span class="ot">&lt;-</span> </span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  salary_male_unique <span class="sc">%&gt;%</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(Average_Salary)) <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>bottom_male_salaries_unique <span class="ot">&lt;-</span> </span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>  salary_male_unique <span class="sc">%&gt;%</span></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Average_Salary) <span class="sc">%&gt;%</span> </span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a>top_female_salaries_unique <span class="ot">&lt;-</span> </span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>  salary_female_unique <span class="sc">%&gt;%</span></span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Average_Salary)) <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a>bottom_female_salaries_unique <span class="ot">&lt;-</span> </span>
+<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a>  salary_female_unique <span class="sc">%&gt;%</span></span>
+<span id="cb61-19"><a href="#cb61-19" aria-hidden="true" tabindex="-1"></a>  ungroup <span class="sc">%&gt;%</span></span>
+<span id="cb61-20"><a href="#cb61-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Average_Salary) <span class="sc">%&gt;%</span></span>
+<span id="cb61-21"><a href="#cb61-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb61-22"><a href="#cb61-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-23"><a href="#cb61-23" aria-hidden="true" tabindex="-1"></a>top_male_salaries_unique </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   `Job Title`               Average_Salary
+   &lt;chr&gt;                              &lt;dbl&gt;
+ 1 Director of Data Science         207742.
+ 2 Marketing Director               189900 
+ 3 Director of Engineering          180000 
+ 4 Software Engineer Manager        173385.
+ 5 Project Engineer                 173344.
+ 6 Director of Operations           171667.
+ 7 Director of Finance              170000 
+ 8 Research Director                165870.
+ 9 Data Scientist                   165062.
+10 Director of Marketing            160641.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>bottom_male_salaries_unique</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   `Job Title`                    Average_Salary
+   &lt;chr&gt;                                   &lt;dbl&gt;
+ 1 Delivery Driver                        28000 
+ 2 Sales Associate                        33515.
+ 3 HR Coordinator                         34667.
+ 4 Business Operations Analyst            35000 
+ 5 Business Development Associate         38333.
+ 6 Juniour HR Generalist                  43000 
+ 7 Sales Representative                   46444.
+ 8 Sales Executive                        47083.
+ 9 Graphic Designer                       51667.
+10 Accountant                             53750 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>top_female_salaries_unique</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   `Job Title`                 Average_Salary
+   &lt;chr&gt;                                &lt;dbl&gt;
+ 1 Director of Data Science           200769.
+ 2 Director of Human Resources        187500 
+ 3 Director of Finance                180000 
+ 4 Director of Operations             174000 
+ 5 Product Manager                    172476.
+ 6 Software Engineer Manager          171793.
+ 7 Data Scientist                     162667.
+ 8 Marketing Director                 162667.
+ 9 Data Engineer                      160000 
+10 Research Director                  159310.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>bottom_female_salaries_unique</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   `Job Title`                     Average_Salary
+   &lt;chr&gt;                                    &lt;dbl&gt;
+ 1 Receptionist                            25000 
+ 2 Sales Associate                         28207.
+ 3 Juniour HR Coordinator                  32000 
+ 4 Customer Service Representative         33333.
+ 5 Sales Representative                    35833.
+ 6 HR Coordinator                          41062.
+ 7 Sales Executive                         41154.
+ 8 Business Development Associate          42500 
+ 9 Copywriter                              42500 
+10 Juniour HR Generalist                   43000 </code></pre>
+</div>
+</div>
+<p>We made the plots again, making sure to standardize the x-axis values to more clearly show any differences in pay. We made male plots blue, and female red, top salary plots have a light theme, and bottom salary plots use the dark theme to differentiate and help show the comparisons we were looking for.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>tms_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(top_male_salaries_unique, <span class="fu">aes</span>(<span class="at">x =</span> Average_Salary)) <span class="sc">+</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span> </span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Job Count"</span>, <span class="at">x =</span> <span class="st">"Average Salary (Male)"</span>) <span class="sc">+</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlim</span>(<span class="dv">150000</span>, <span class="dv">250000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>bms_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(bottom_male_salaries_unique, <span class="fu">aes</span>(<span class="at">x =</span> Average_Salary)) <span class="sc">+</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">"turquoise2"</span>, <span class="at">bins =</span> <span class="dv">40</span>) <span class="sc">+</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Job Count"</span>, <span class="at">x =</span> <span class="st">"Average Salary (Male)"</span>) <span class="sc">+</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlim</span>(<span class="dv">24000</span>, <span class="dv">58000</span>)<span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">theme_dark</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>tfs_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(top_female_salaries_unique, <span class="fu">aes</span>(<span class="at">x =</span> Average_Salary)) <span class="sc">+</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Job Count"</span>, <span class="at">x =</span> <span class="st">"Average Salary (Female)"</span>) <span class="sc">+</span></span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlim</span>(<span class="dv">150000</span>, <span class="dv">250000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>bfs_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(bottom_female_salaries_unique, <span class="fu">aes</span>(<span class="at">x =</span> Average_Salary)) <span class="sc">+</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">"lightcoral"</span>) <span class="sc">+</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Job Count"</span>, <span class="at">x =</span> <span class="st">"Average Salary (Female)"</span>) <span class="sc">+</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlim</span>(<span class="dv">24000</span>, <span class="dv">58000</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">theme_dark</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We used the “cowplot” package to easily combine all four plots into one graphic for a more complete visual comparison of gender salary differences on the poles of the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(tms_plot, bms_plot, tfs_plot, bfs_plot, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>After doing this, we realized that we could do almost the same thing, but in a broader sense (as well as faster), by just using a box plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co">#comparing all salaries</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Salary_cleaned, <span class="fu">aes</span>(<span class="at">x =</span> Salary, <span class="at">y =</span> Gender)) <span class="sc">+</span></span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(</span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> <span class="fu">as.factor</span>(<span class="st">`</span><span class="at">Gender</span><span class="st">`</span>))) <span class="sc">+</span></span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>)) <span class="sc">+</span></span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The box plots, as well as the four plots prior, all point to what we had guessed which was that males do indeed earn higher salaries than females on average.</p>
+</section>
+<section id="exploring-education-level" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-education-level">Exploring Education Level:</h2>
+<p>Next, we examined the role education level played on salary amount. This time, we started with the general plot comparing all salaries grouped by Education Level, then moved on to showing the average salary of each Education Level after that.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA (Education Level)</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Salary_cleaned, <span class="fu">aes</span>(<span class="at">y =</span> Salary,</span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">x =</span> <span class="fu">as.factor</span>(<span class="st">`</span><span class="at">Education Level</span><span class="st">`</span>),</span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">fill =</span> <span class="fu">as.factor</span>(<span class="st">`</span><span class="at">Education Level</span><span class="st">`</span></span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>                                            )))<span class="sc">+</span></span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"yellow"</span>, <span class="st">"darkorchid3"</span>)) <span class="sc">+</span></span>
+<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Education Level"</span>) <span class="sc">+</span> </span>
+<span id="cb82-9"><a href="#cb82-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb82-10"><a href="#cb82-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>salary_by_ed_lvl <span class="ot">&lt;-</span> Salary_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Education Level</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Mean =</span> <span class="fu">mean</span>(Salary))</span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salary_by_ed_lvl, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Education Level</span><span class="st">`</span>,</span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">y =</span> Mean,</span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">fill =</span> <span class="fu">as.factor</span>(</span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">`</span><span class="at">Education Level</span><span class="st">`</span></span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>                                 ))) <span class="sc">+</span></span>
+<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"yellow"</span>, <span class="st">"darkorchid3"</span> )) <span class="sc">+</span> </span>
+<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Mean Salary"</span>) <span class="sc">+</span></span>
+<span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb83-13"><a href="#cb83-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-14-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We were pleased to see not only that the data seemed to indicate that going to college is indeed still worth it, but that the data was nice and linear as well for both the raw and the average salary by education level comparisons.</p>
+</section>
+<section id="exploring-age-and-seniority" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-age-and-seniority">Exploring Age and Seniority:</h2>
+<p>Age and Seniority were two predictors we were especially excited to look at, and we had high expectations on the strength of the correlation between them and the salaries those of high age and in senior positions would hold. Once again, we showed a general plot using the raw salary data when compared with Age, this time using whether or not the job holder had the Senior status to determine the color of the plot point. After getting a nice-looking scatter plot from that (and being very happy with the color palette), we could see that there was some positive correlation between the age of a person, whether or not they would be in a senior position, and their salary. To get a slightly different perspective, we grouped the ages by decade and compared each Age Group’s average salary to each other, and were once again satisfied to see a seemingly linear relationship between Age and Salary.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA (Age/Seniority)</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Salary_cleaned, <span class="fu">aes</span>(<span class="at">y =</span> Salary, <span class="at">x =</span> Age, <span class="at">color =</span> <span class="fu">as.factor</span>(Senior))) <span class="sc">+</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"ivory4"</span>, <span class="st">"goldenrod"</span>),</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Non-Senior Position"</span>, </span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Senior"</span>)) <span class="sc">+</span></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Seniority"</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>salary_by_age <span class="ot">&lt;-</span> Salary_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Age_Group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>    Age <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">"29 &amp; Younger"</span>,</span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>    Age <span class="sc">&lt;</span> <span class="dv">40</span> <span class="sc">&amp;</span> Age <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">"30's"</span>,</span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>    Age <span class="sc">&lt;</span> <span class="dv">50</span> <span class="sc">&amp;</span> Age <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40's"</span>,</span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>    Age <span class="sc">&lt;</span> <span class="dv">60</span> <span class="sc">&amp;</span> Age <span class="sc">&gt;=</span> <span class="dv">50</span> <span class="sc">~</span> <span class="st">"50's"</span>,</span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>    Age <span class="sc">&gt;=</span> <span class="dv">60</span> <span class="sc">~</span> <span class="st">"60 &amp; Older"</span></span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span> </span>
+<span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Age_Group) <span class="sc">%&gt;%</span></span>
+<span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Average_Salary =</span> <span class="fu">mean</span>(Salary))</span>
+<span id="cb85-11"><a href="#cb85-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-12"><a href="#cb85-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salary_by_age, <span class="fu">aes</span>(<span class="at">x =</span> Age_Group,</span>
+<span id="cb85-13"><a href="#cb85-13" aria-hidden="true" tabindex="-1"></a>                          <span class="at">y =</span> Average_Salary,</span>
+<span id="cb85-14"><a href="#cb85-14" aria-hidden="true" tabindex="-1"></a>                          <span class="at">fill =</span> <span class="fu">as.factor</span>(Age_Group)),) <span class="sc">+</span></span>
+<span id="cb85-15"><a href="#cb85-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"ivory4"</span>,<span class="st">"grey"</span>,</span>
+<span id="cb85-16"><a href="#cb85-16" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"lightgoldenrod2"</span>,</span>
+<span id="cb85-17"><a href="#cb85-17" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"goldenrod2"</span>,</span>
+<span id="cb85-18"><a href="#cb85-18" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"goldenrod3"</span>)) <span class="sc">+</span></span>
+<span id="cb85-19"><a href="#cb85-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb85-20"><a href="#cb85-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb85-21"><a href="#cb85-21" aria-hidden="true" tabindex="-1"></a>                       <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"slategray3"</span>)) <span class="sc">+</span></span>
+<span id="cb85-22"><a href="#cb85-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age Group"</span>, <span class="at">y =</span> <span class="st">"Average Salary"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exploring-country-and-race" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-country-and-race">Exploring Country and Race:</h2>
+<p>The first thing we did to look at Country and Race was to use multilevel grouping to get a better understanding of the demographics of the data. After noting the variety of Races in each Country, we proceeded to make a violin plot comparing the Salaries of those living in different Countries. That plot did not look great, so we reverted to using box plots for comparing Races’ Salary earnings. The main takeaway we received from these two plots was that the Country and Race of a person do not seem to be significant factors in determining one’s salary.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA (Country/Race)</span></span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>Salary_cleaned <span class="sc">%&gt;%</span> </span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country, Race) <span class="sc">%&gt;%</span></span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Country'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 17 × 3
+# Groups:   Country [5]
+   Country   Race             count
+   &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;
+ 1 Australia Asian              470
+ 2 Australia Australian         449
+ 3 Australia White              407
+ 4 Canada    Asian              452
+ 5 Canada    Black              428
+ 6 Canada    White              431
+ 7 China     Chinese            441
+ 8 China     Korean             454
+ 9 China     White              438
+10 UK        Asian              328
+11 UK        Mixed              329
+12 UK        Welsh              330
+13 UK        White              327
+14 USA       African American   349
+15 USA       Asian              330
+16 USA       Hispanic           318
+17 USA       White              346</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Salary_cleaned, <span class="fu">aes</span>(<span class="at">x =</span> Salary, <span class="at">y =</span> Country, <span class="at">fill =</span> <span class="fu">as.factor</span>(Country))) <span class="sc">+</span> </span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"white"</span>, <span class="st">"gold"</span>, <span class="st">"purple"</span>, <span class="st">"blue"</span>)) <span class="sc">+</span></span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_violin</span>() <span class="sc">+</span></span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Salary_cleaned, <span class="fu">aes</span>(<span class="at">x =</span> Salary, <span class="at">y =</span> Race, <span class="at">color =</span>  <span class="fu">as.factor</span>(Race))) <span class="sc">+</span></span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-16-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exploring-job-title" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-job-title">Exploring Job Title:</h2>
+<p>When thinking of what to explore with Job Titles, we were at first a little unsure of what to compare, since there were so many unique Job Titles in the data. We ended up simply making a table of the top 10 highest-salary jobs and the “top 10” lowest-salary jobs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA (Job Title)</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="co">#hrm...</span></span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>salary_by_job_title <span class="ot">&lt;-</span> Salary_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Job Title</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb91-5"><a href="#cb91-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Average_Salary =</span> <span class="fu">mean</span>(Salary)) <span class="sc">%&gt;%</span></span>
+<span id="cb91-6"><a href="#cb91-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Average_Salary)</span>
+<span id="cb91-7"><a href="#cb91-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-8"><a href="#cb91-8" aria-hidden="true" tabindex="-1"></a>top_jobs <span class="ot">&lt;-</span> salary_by_job_title <span class="sc">%&gt;%</span></span>
+<span id="cb91-9"><a href="#cb91-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb91-10"><a href="#cb91-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Average_Salary)) <span class="sc">%&gt;%</span></span>
+<span id="cb91-11"><a href="#cb91-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb91-12"><a href="#cb91-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-13"><a href="#cb91-13" aria-hidden="true" tabindex="-1"></a>worst_jobs <span class="ot">&lt;-</span> salary_by_job_title <span class="sc">%&gt;%</span></span>
+<span id="cb91-14"><a href="#cb91-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb91-15"><a href="#cb91-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Average_Salary) <span class="sc">%&gt;%</span></span>
+<span id="cb91-16"><a href="#cb91-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb91-17"><a href="#cb91-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-18"><a href="#cb91-18" aria-hidden="true" tabindex="-1"></a>top_jobs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   `Job Title`                 Average_Salary
+   &lt;chr&gt;                                &lt;dbl&gt;
+ 1 Director of Data Science           204561.
+ 2 Director of Human Resources        187500 
+ 3 Marketing Director                 183615.
+ 4 Director of Engineering            180000 
+ 5 Director of Finance                175000 
+ 6 Software Engineer Manager          172961.
+ 7 Director of Operations             172727.
+ 8 Project Engineer                   166064.
+ 9 Data Scientist                     164099.
+10 Research Director                  163333.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>worst_jobs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   `Job Title`                     Average_Salary
+   &lt;chr&gt;                                    &lt;dbl&gt;
+ 1 Receptionist                            25000 
+ 2 Delivery Driver                         28000 
+ 3 Sales Associate                         30736.
+ 4 Juniour HR Coordinator                  32000 
+ 5 Customer Service Representative         33333.
+ 6 Business Operations Analyst             35000 
+ 7 HR Coordinator                          38321.
+ 8 Business Development Associate          40714.
+ 9 Sales Representative                    41728.
+10 Copywriter                              42500 </code></pre>
+</div>
+</div>
+<p>One interesting thing that we could see from these tables is that Job Titles with “Director” and “Engineer” are featured frequently in the higher end of the Salary data. This could either be an insight into the types of jobs that give high Salaries, or the types of jobs that the data was scraped from. Either way, the wide range of names meant that job titles were most likely going to be largely ineffective as a predictor for our models.</p>
+</section>
+</section>
+<section id="modeling" class="level1">
+<h1>Modeling:</h1>
+<p>Now that we have gathered some insights about this data as well as having answered our minor questions from our exploratory analysis, we will use modeling to answer our main question.</p>
+<p>Before we get into creating the models, we will split the salary dataset into a training and testing data frame, using a 90/10 proportion respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>salary_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(Salary_cleaned, <span class="at">prop =</span> <span class="fl">0.90</span>)</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span><span class="fu">training</span>(salary_split)</span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a>testing <span class="ot">&lt;-</span> <span class="fu">testing</span>(salary_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To create a ridge regression model, we need to turn all of our datasets into numeric factors. We will get to the ridge regression model later. This is simply up here for rendering reasons.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>ridge_salary <span class="ot">&lt;-</span> Salary_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transform</span>(.,</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">Race =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(Race)),</span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">Country =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(Country)),</span>
+<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a>                   <span class="st">`</span><span class="at">Job Title</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(<span class="st">`</span><span class="at">Job Title</span><span class="st">`</span>)),</span>
+<span id="cb96-6"><a href="#cb96-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">Gender =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(Gender)))</span>
+<span id="cb96-7"><a href="#cb96-7" aria-hidden="true" tabindex="-1"></a>ridge_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(ridge_salary, <span class="at">prop =</span> .<span class="dv">90</span>)</span>
+<span id="cb96-8"><a href="#cb96-8" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">training</span>(ridge_split)</span>
+<span id="cb96-9"><a href="#cb96-9" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">testing</span>(ridge_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="multiple-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-linear-regression">Multiple Linear Regression:</h2>
+<p>Now that we split the data into training and testing, we will create our first model: a multiple linear regression model. A multiple linear regression model is simple, yet it can still give a good benchmark for comparisons to our other models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> training)</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Salary ~ ., data = training)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-128640  -11531      72   11323   64802 
+
+Coefficients:
+                                            Estimate Std. Error t value
+(Intercept)                                 27961.02   11753.96   2.379
+Age                                            52.69     128.84   0.409
+GenderMale                                    125.09     647.39   0.193
+`Education Level`                            6759.87     602.31  11.223
+`Job Title`Accountant                       -1448.32   14449.62  -0.100
+`Job Title`Administrative Assistant        -36959.78   19393.59  -1.906
+`Job Title`Back end Developer               29012.78   11303.87   2.567
+`Job Title`Business Analyst                  9278.53   12440.57   0.746
+`Job Title`Business Development Associate   -8228.47   15023.22  -0.548
+`Job Title`Business Development Manager     26294.31   15839.02   1.660
+`Job Title`Business Operations Analyst     -11943.50   25029.12  -0.477
+`Job Title`Content Marketing Manager        21068.34   11560.36   1.822
+`Job Title`Copywriter                      -10176.52   19394.53  -0.525
+`Job Title`Customer Service Manager        -23925.86   19405.42  -1.233
+`Job Title`Customer Service Representative -10361.47   14461.58  -0.716
+`Job Title`Data Analyst                     54128.02   11264.03   4.805
+`Job Title`Data Engineer                    27455.85   15864.04   1.731
+`Job Title`Data Scientist                   54416.86   11289.41   4.820
+`Job Title`Delivery Driver                  -4148.77   15832.76  -0.262
+`Job Title`Digital Marketing Manager        13344.43   11673.16   1.143
+`Job Title`Digital Marketing Specialist      5186.10   12800.93   0.405
+`Job Title`Director of Data Science         60397.70   11706.62   5.159
+`Job Title`Director of Engineering          25450.91   19430.92   1.310
+`Job Title`Director of Finance              20684.08   19417.56   1.065
+`Job Title`Director of HR                    9145.11   11582.89   0.790
+`Job Title`Director of Human Resources      20276.92   19440.59   1.043
+`Job Title`Director of Marketing            25010.38   11519.39   2.171
+`Job Title`Director of Operations           12660.84   13295.45   0.952
+`Job Title`Engineer                          8080.92   19437.87   0.416
+`Job Title`Event Coordinator               -20695.61   25007.95  -0.828
+`Job Title`Financial Advisor                16330.15   15024.22   1.087
+`Job Title`Financial Analyst                18973.42   11663.88   1.627
+`Job Title`Financial Manager                44673.16   11375.96   3.927
+`Job Title`Front end Developer              22786.79   11299.90   2.017
+`Job Title`Front End Developer              18680.92   11924.37   1.567
+`Job Title`Full Stack Engineer              34864.63   11286.77   3.089
+`Job Title`Graphic Designer                   826.81   12320.43   0.067
+`Job Title`HR Coordinator                   -9100.63   12089.48  -0.753
+`Job Title`HR Generalist                      -23.01   11426.79  -0.002
+`Job Title`HR Manager                        8075.77   15841.77   0.510
+`Job Title`Human Resources Coordinator     -10140.39   11668.72  -0.869
+`Job Title`Human Resources Manager          15254.65   11354.89   1.343
+`Job Title`IT Consultant                    25852.45   25046.94   1.032
+`Job Title`IT Support Specialist            -4107.66   19394.57  -0.212
+`Job Title`Juniour HR Coordinator           -5902.54   19393.01  -0.304
+`Job Title`Juniour HR Generalist             1036.75   17109.53   0.061
+`Job Title`Manager                          24193.95   19427.65   1.245
+`Job Title`Marketing Analyst                 7623.76   11366.30   0.671
+`Job Title`Marketing Coordinator             8905.06   11348.74   0.785
+`Job Title`Marketing Director               64593.51   11582.31   5.577
+`Job Title`Marketing Manager                17552.02   11287.43   1.555
+`Job Title`Marketing Specialist              5269.26   13239.95   0.398
+`Job Title`Operations Analyst               -4211.39   13703.76  -0.307
+`Job Title`Operations Coordinator           19127.15   17093.34   1.119
+`Job Title`Operations Manager               14127.03   11403.03   1.239
+`Job Title`Product Designer                  6068.38   11503.84   0.528
+`Job Title`Product Manager                  56716.41   11279.24   5.028
+`Job Title`Product Marketing Manager        27728.19   11576.72   2.395
+`Job Title`Project Coordinator               6785.32   15041.38   0.451
+`Job Title`Project Engineer                 52300.18   11312.23   4.623
+`Job Title`Project Manager                  25440.83   11846.63   2.148
+`Job Title`Receptionist                     -6458.27   11629.58  -0.555
+`Job Title`Recruiter                       -22397.21   17096.11  -1.310
+`Job Title`Research Director                50900.40   11607.01   4.385
+`Job Title`Research Scientist               42189.94   11471.55   3.678
+`Job Title`Sales Associate                  -8477.07   11315.14  -0.749
+`Job Title`Sales Director                   33900.71   11592.35   2.924
+`Job Title`Sales Executive                  -2245.43   11838.37  -0.190
+`Job Title`Sales Manager                    21826.89   11601.75   1.881
+`Job Title`Sales Representative             -7536.37   11504.21  -0.655
+`Job Title`Scientist                        17019.22   19412.17   0.877
+`Job Title`Social Media Manager               -34.87   12605.58  -0.003
+`Job Title`Social Media Specialist          -9195.83   19388.73  -0.474
+`Job Title`Software Developer                3043.92   11329.39   0.269
+`Job Title`Software Engineer                45475.88   11223.51   4.052
+`Job Title`Software Engineer Manager        36631.60   11316.25   3.237
+`Job Title`Training Specialist             -17204.57   19396.36  -0.887
+`Job Title`UX Designer                      21038.06   17118.99   1.229
+`Job Title`Web Developer                     -293.64   11383.97  -0.026
+`Years of Experience`                        5376.44     158.63  33.892
+CountryCanada                                 131.23    1131.20   0.116
+CountryChina                                  712.88    1459.93   0.488
+CountryUK                                      45.73    1226.28   0.037
+CountryUSA                                    178.60    1213.63   0.147
+RaceAsian                                    2459.05    1619.57   1.518
+RaceAustralian                               2688.23    2084.49   1.290
+RaceBlack                                    1113.91    2097.20   0.531
+RaceChinese                                   319.89    2273.09   0.141
+RaceHispanic                                 1575.39    1840.74   0.856
+RaceKorean                                   1894.87    2270.29   0.835
+RaceMixed                                    2896.50    2238.72   1.294
+RaceWelsh                                     553.37    2231.90   0.248
+RaceWhite                                    2852.07    1618.34   1.762
+Senior                                     -11413.52    1281.70  -8.905
+                                           Pr(&gt;|t|)    
+(Intercept)                                0.017398 *  
+Age                                        0.682578    
+GenderMale                                 0.846795    
+`Education Level`                           &lt; 2e-16 ***
+`Job Title`Accountant                      0.920163    
+`Job Title`Administrative Assistant        0.056728 .  
+`Job Title`Back end Developer              0.010294 *  
+`Job Title`Business Analyst                0.455801    
+`Job Title`Business Development Associate  0.583907    
+`Job Title`Business Development Manager    0.096948 .  
+`Job Title`Business Operations Analyst     0.633249    
+`Job Title`Content Marketing Manager       0.068435 .  
+`Job Title`Copywriter                      0.599804    
+`Job Title`Customer Service Manager        0.217645    
+`Job Title`Customer Service Representative 0.473722    
+`Job Title`Data Analyst                    1.58e-06 ***
+`Job Title`Data Engineer                   0.083558 .  
+`Job Title`Data Scientist                  1.47e-06 ***
+`Job Title`Delivery Driver                 0.793302    
+`Job Title`Digital Marketing Manager       0.253014    
+`Job Title`Digital Marketing Specialist    0.685393    
+`Job Title`Director of Data Science        2.56e-07 ***
+`Job Title`Director of Engineering         0.190310    
+`Job Title`Director of Finance             0.286818    
+`Job Title`Director of HR                  0.429831    
+`Job Title`Director of Human Resources     0.296982    
+`Job Title`Director of Marketing           0.029959 *  
+`Job Title`Director of Operations          0.341000    
+`Job Title`Engineer                        0.677622    
+`Job Title`Event Coordinator               0.407953    
+`Job Title`Financial Advisor               0.277116    
+`Job Title`Financial Analyst               0.103858    
+`Job Title`Financial Manager               8.70e-05 ***
+`Job Title`Front end Developer             0.043788 *  
+`Job Title`Front End Developer             0.117258    
+`Job Title`Full Stack Engineer             0.002018 ** 
+`Job Title`Graphic Designer                0.946498    
+`Job Title`HR Coordinator                  0.451617    
+`Job Title`HR Generalist                   0.998393    
+`Job Title`HR Manager                      0.610227    
+`Job Title`Human Resources Coordinator     0.384870    
+`Job Title`Human Resources Manager         0.179181    
+`Job Title`IT Consultant                   0.302040    
+`Job Title`IT Support Specialist           0.832275    
+`Job Title`Juniour HR Coordinator          0.760861    
+`Job Title`Juniour HR Generalist           0.951684    
+`Job Title`Manager                         0.213058    
+`Job Title`Marketing Analyst               0.502417    
+`Job Title`Marketing Coordinator           0.432676    
+`Job Title`Marketing Director              2.56e-08 ***
+`Job Title`Marketing Manager               0.119998    
+`Job Title`Marketing Specialist            0.690658    
+`Job Title`Operations Analyst              0.758613    
+`Job Title`Operations Coordinator          0.263193    
+`Job Title`Operations Manager              0.215438    
+`Job Title`Product Designer                0.597860    
+`Job Title`Product Manager                 5.09e-07 ***
+`Job Title`Product Marketing Manager       0.016644 *  
+`Job Title`Project Coordinator             0.651926    
+`Job Title`Project Engineer                3.86e-06 ***
+`Job Title`Project Manager                 0.031793 *  
+`Job Title`Receptionist                    0.578689    
+`Job Title`Recruiter                       0.190221    
+`Job Title`Research Director               1.18e-05 ***
+`Job Title`Research Scientist              0.000237 ***
+`Job Title`Sales Associate                 0.453779    
+`Job Title`Sales Director                  0.003464 ** 
+`Job Title`Sales Executive                 0.849571    
+`Job Title`Sales Manager                   0.059975 .  
+`Job Title`Sales Representative            0.512431    
+`Job Title`Scientist                       0.380670    
+`Job Title`Social Media Manager            0.997793    
+`Job Title`Social Media Specialist         0.635313    
+`Job Title`Software Developer              0.788189    
+`Job Title`Software Engineer               5.15e-05 ***
+`Job Title`Software Engineer Manager       0.001214 ** 
+`Job Title`Training Specialist             0.375115    
+`Job Title`UX Designer                     0.219147    
+`Job Title`Web Developer                   0.979423    
+`Years of Experience`                       &lt; 2e-16 ***
+CountryCanada                              0.907647    
+CountryChina                               0.625356    
+CountryUK                                  0.970255    
+CountryUSA                                 0.883013    
+RaceAsian                                  0.128983    
+RaceAustralian                             0.197229    
+RaceBlack                                  0.595339    
+RaceChinese                                0.888088    
+RaceHispanic                               0.392119    
+RaceKorean                                 0.403955    
+RaceMixed                                  0.195779    
+RaceWelsh                                  0.804194    
+RaceWhite                                  0.078064 .  
+Senior                                      &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 22360 on 5870 degrees of freedom
+Multiple R-squared:  0.823, Adjusted R-squared:  0.8202 
+F-statistic: 293.5 on 93 and 5870 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>As we can see, the most significant predictors are education level, years of experience, and senior, all of which make sense as it is logical that the more years of experience you have in a profession and the higher level of education you have, the more likely you are going to earn more money than someone who has less experience and a lesser degree. Seniority also makes sense as a senior-level position undoubtedly has more responsibilities than someone who isn’t. However, we can see that several job title codes are good indicators. Jobs such as software engineer, research scientist, research director, product manager, and data scientist/analyst all appear to be very good predictors for our model. This may well be because there are simply more observations of these job titles in the data set, but all of these fields are certainly very highly-paying positions. Now, to look at the results. We can see that the model generated an R-squared value of .82, on an F-stat of 296.3, and a p-value of &lt;2.2e-16, so needless to say, this is a respectable model; it is not perfect, but there is a strong positive correlation between the predictors and Salary.</p>
+<p>Before we go any further, we should check the assumptions of our model to see if this dataset even can be fitted into a linear model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: not plotting observations with leverage one:
+  1659, 4690</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in sqrt(crit * p * (1 - hh)/hh): NaNs produced
+Warning in sqrt(crit * p * (1 - hh)/hh): NaNs produced</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Checking the normal assumptions of linear regression, we can see that the data appears to fit to an acceptable level. The residuals vs.&nbsp;Fitted values graph is distributed mostly evenly from end to end, and the Q-Q Residuals plot, while both tails do slightly veer off the mean, they do at least mirror each other.</p>
+<p>Now let us fit this model into our testing data. As you can see, we bound the predicted outcomes onto the testing dataset so we can compare the predicted value to the employee’s actual salary.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>lm_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, testing) <span class="sc">%&gt;%</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(testing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+• `` -&gt; `...1`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>lm_preds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 663 × 10
+     ...1   Age Gender `Education Level` `Job Title`       `Years of Experience`
+    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt; &lt;chr&gt;                             &lt;dbl&gt;
+ 1 28938.    24 Male                   0 Sales Associate                       1
+ 2 28926.    28 Female                 0 Sales Associate                       1
+ 3 28946.    30 Female                 0 Sales Associate                       1
+ 4 25096.    21 Female                 0 Sales Representa…                     0
+ 5 24219.    21 Female                 0 Sales Representa…                     0
+ 6 25619.    24 Female                 0 Receptionist                          0
+ 7 25375.    24 Female                 0 Receptionist                          0
+ 8 24521.    24 Female                 0 Receptionist                          0
+ 9 25798.    24 Female                 0 Receptionist                          0
+10 25226.    24 Female                 0 Receptionist                          0
+# ℹ 653 more rows
+# ℹ 4 more variables: Salary &lt;dbl&gt;, Country &lt;chr&gt;, Race &lt;chr&gt;, Senior &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>While the predictions are not perfect, the model does get rather close to predicting the salary of some employees, with some predictions getting even within 1000 dollars of the actual value. However, it is not perfect, so let’s tune the model to see if we can improve the accuracy.</p>
+<p>Let us try to optimize the model by running a step-forward selection model to see what variables it would choose to use.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ols_step_forward_p</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+                                       Stepwise Summary                                        
+---------------------------------------------------------------------------------------------
+Step    Variable                    AIC           SBC           SBIC         R2       Adj. R2 
+---------------------------------------------------------------------------------------------
+ 0      Base Model               146619.170    146632.557    129691.086    0.00000    0.00000 
+ 1      `Years of Experience`    140211.084    140231.164    123283.645    0.65863    0.65858 
+ 2      `Education Level`        139565.367    139592.141    122637.451    0.69376    0.69366 
+ 3      Age                      139330.624    139364.092    122402.112    0.70568    0.70553 
+ 4      Gender                   139250.640    139290.801    122321.447    0.70970    0.70951 
+ 5      Senior                   139203.843    139250.697    122273.957    0.71207    0.71182 
+ 6      `Job Title`              136462.281    137011.147    119389.382    0.82269    0.82028 
+---------------------------------------------------------------------------------------------
+
+Final Model Output 
+------------------
+
+                              Model Summary                               
+-------------------------------------------------------------------------
+R                           0.907       RMSE                   22199.211 
+R-Squared                   0.823       MSE                492804973.341 
+Adj. R-Squared              0.820       Coef. Var                 19.363 
+Pred R-Squared               -Inf       AIC                   136462.281 
+MAE                     16411.937       SBC                   137011.147 
+-------------------------------------------------------------------------
+ RMSE: Root Mean Square Error 
+ MSE: Mean Square Error 
+ MAE: Mean Absolute Error 
+ AIC: Akaike Information Criteria 
+ SBC: Schwarz Bayesian Criteria 
+
+                                     ANOVA                                       
+--------------------------------------------------------------------------------
+                    Sum of                                                      
+                   Squares          DF         Mean Square       F         Sig. 
+--------------------------------------------------------------------------------
+Regression    1.363699e+13          80    170462322393.804    341.204    0.0000 
+Residual      2.939089e+12        5883       499590151.454                      
+Total         1.657607e+13        5963                                          
+--------------------------------------------------------------------------------
+
+                                                       Parameter Estimates                                                         
+----------------------------------------------------------------------------------------------------------------------------------
+                                     model          Beta    Std. Error    Std. Beta      t        Sig          lower        upper 
+----------------------------------------------------------------------------------------------------------------------------------
+                               (Intercept)     30724.678     11628.362                  2.642    0.008      7928.817    53520.539 
+                     `Years of Experience`      5385.583       158.432        0.613    33.993    0.000      5074.999     5696.167 
+                         `Education Level`      6742.715       601.793        0.113    11.204    0.000      5562.978     7922.451 
+                                       Age        46.957       128.680        0.007     0.365    0.715      -205.302      299.217 
+                                GenderMale       151.735       646.690        0.001     0.235    0.815     -1116.014     1419.484 
+                                    Senior    -11349.575      1279.553       -0.075    -8.870    0.000    -13857.969    -8841.181 
+                     `Job Title`Accountant     -2056.067     14429.640       -0.001    -0.142    0.887    -30343.462    26231.328 
+       `Job Title`Administrative Assistant    -37698.529     19366.301       -0.013    -1.947    0.052    -75663.592      266.533 
+             `Job Title`Back end Developer     28680.100     11290.229        0.101     2.540    0.011      6547.105    50813.095 
+               `Job Title`Business Analyst      8674.405     12425.564        0.009     0.698    0.485    -15684.264    33033.074 
+ `Job Title`Business Development Associate     -8307.031     14999.506       -0.005    -0.554    0.580    -37711.571    21097.510 
+   `Job Title`Business Development Manager     25609.340     15819.178        0.013     1.619    0.106     -5402.059    56620.738 
+    `Job Title`Business Operations Analyst    -12059.258     24996.671       -0.003    -0.482    0.630    -61061.915    36943.398 
+      `Job Title`Content Marketing Manager     20797.860     11548.012        0.040     1.801    0.072     -1840.485    43436.205 
+                     `Job Title`Copywriter     -9793.106     19363.178       -0.003    -0.506    0.613    -47752.048    28165.835 
+       `Job Title`Customer Service Manager    -23494.967     19375.866       -0.008    -1.213    0.225    -61478.782    14488.847 
+`Job Title`Customer Service Representative    -10538.486     14439.823       -0.006    -0.730    0.466    -38845.842    17768.870 
+                   `Job Title`Data Analyst     53782.934     11251.495        0.238     4.780    0.000     31725.871    75839.997 
+                  `Job Title`Data Engineer     27061.970     15854.905        0.013     1.707    0.088     -4019.467    58143.408 
+                 `Job Title`Data Scientist     54071.181     11278.109        0.275     4.794    0.000     31961.946    76180.417 
+                `Job Title`Delivery Driver     -4003.384     15820.630       -0.002    -0.253    0.800    -35017.629    27010.861 
+      `Job Title`Digital Marketing Manager     13131.119     11661.456        0.022     1.126    0.260     -9729.619    35991.857 
+   `Job Title`Digital Marketing Specialist      4762.372     12787.796        0.004     0.372    0.710    -20306.404    29831.149 
+       `Job Title`Director of Data Science     60096.867     11693.643        0.104     5.139    0.000     37173.032    83020.703 
+        `Job Title`Director of Engineering     25087.910     19401.468        0.009     1.293    0.196    -12946.094    63121.913 
+            `Job Title`Director of Finance     20724.950     19389.933        0.007     1.069    0.285    -17286.440    58736.340 
+                 `Job Title`Director of HR      8779.091     11570.108        0.017     0.759    0.448    -13902.570    31460.752 
+    `Job Title`Director of Human Resources     19040.902     19407.615        0.007     0.981    0.327    -19005.153    57086.957 
+          `Job Title`Director of Marketing     24719.012     11507.850        0.053     2.148    0.032      2159.399    47278.624 
+         `Job Title`Director of Operations     12407.757     13282.415        0.010     0.934    0.350    -13630.656    38446.170 
+                       `Job Title`Engineer      7728.827     19403.033        0.003     0.398    0.690    -30308.245    45765.898 
+              `Job Title`Event Coordinator    -20850.977     24993.560       -0.005    -0.834    0.404    -69847.536    28145.581 
+              `Job Title`Financial Advisor     15872.345     15006.482        0.009     1.058    0.290    -13545.871    45290.561 
+              `Job Title`Financial Analyst     18540.649     11650.909        0.031     1.591    0.112     -4299.413    41380.711 
+              `Job Title`Financial Manager     44411.121     11364.459        0.122     3.908    0.000     22132.608    66689.634 
+            `Job Title`Front end Developer     22497.292     11288.028        0.079     1.993    0.046       368.610    44625.973 
+            `Job Title`Front End Developer     18083.972     11908.358        0.024     1.519    0.129     -5260.783    41428.727 
+            `Job Title`Full Stack Engineer     34505.899     11273.416        0.138     3.061    0.002     12405.862    56605.936 
+               `Job Title`Graphic Designer       178.238     12302.457        0.000     0.014    0.988    -23939.096    24295.572 
+                 `Job Title`HR Coordinator     -9212.579     12078.197       -0.011    -0.763    0.446    -32890.281    14465.122 
+                  `Job Title`HR Generalist      -362.243     11414.284       -0.001    -0.032    0.975    -22738.432    22013.946 
+                     `Job Title`HR Manager      7595.974     15822.284        0.004     0.480    0.631    -23421.515    38613.463 
+    `Job Title`Human Resources Coordinator    -10482.010     11656.804       -0.018    -0.899    0.369    -33333.627    12369.607 
+        `Job Title`Human Resources Manager     14995.523     11342.480        0.044     1.322    0.186     -7239.903    37230.950 
+                  `Job Title`IT Consultant     26733.118     25010.862        0.007     1.069    0.285    -22297.360    75763.595 
+          `Job Title`IT Support Specialist     -5371.244     19365.376       -0.002    -0.277    0.782    -43334.495    32592.007 
+         `Job Title`Juniour HR Coordinator     -5260.711     19368.727       -0.002    -0.272    0.786    -43230.530    32709.109 
+          `Job Title`Juniour HR Generalist       138.779     17081.810        0.000     0.008    0.994    -33347.844    33625.401 
+                        `Job Title`Manager     23860.771     19401.799        0.008     1.230    0.219    -14173.881    61895.424 
+              `Job Title`Marketing Analyst      7349.764     11351.852        0.020     0.647    0.517    -14904.035    29603.563 
+          `Job Title`Marketing Coordinator      8465.381     11334.119        0.025     0.747    0.455    -13753.655    30684.417 
+             `Job Title`Marketing Director     64246.570     11568.634        0.125     5.554    0.000     41567.798    86925.342 
+              `Job Title`Marketing Manager     17239.131     11273.753        0.069     1.529    0.126     -4861.567    39339.828 
+           `Job Title`Marketing Specialist      4646.590     13225.861        0.004     0.351    0.725    -21280.955    30574.135 
+             `Job Title`Operations Analyst     -4802.359     13688.903       -0.003    -0.351    0.726    -31637.637    22032.918 
+         `Job Title`Operations Coordinator     19471.707     17081.719        0.008     1.140    0.254    -14014.737    52958.151 
+             `Job Title`Operations Manager     13632.820     11390.393        0.034     1.197    0.231     -8696.535    35962.174 
+               `Job Title`Product Designer      5587.308     11488.573        0.012     0.486    0.627    -16934.515    28109.130 
+                `Job Title`Product Manager     56333.937     11267.370        0.230     5.000    0.000     34245.753    78422.122 
+      `Job Title`Product Marketing Manager     27285.898     11562.081        0.054     2.360    0.018      4619.973    49951.823 
+            `Job Title`Project Coordinator      5592.006     15021.791        0.003     0.372    0.710    -23856.222    35040.235 
+               `Job Title`Project Engineer     51934.458     11301.998        0.209     4.595    0.000     29778.390    74090.525 
+                `Job Title`Project Manager     25094.367     11837.029        0.035     2.120    0.034      1889.443    48299.292 
+                   `Job Title`Receptionist     -6833.589     11617.930       -0.012    -0.588    0.556    -29608.998    15941.821 
+                      `Job Title`Recruiter    -22051.374     17078.282       -0.009    -1.291    0.197    -55531.080    11428.333 
+              `Job Title`Research Director     50413.889     11594.862        0.101     4.348    0.000     27683.701    73144.078 
+             `Job Title`Research Scientist     41876.405     11458.996        0.102     3.654    0.000     19412.563    64340.246 
+                `Job Title`Sales Associate     -8782.814     11303.392       -0.030    -0.777    0.437    -30941.614    13375.986 
+                 `Job Title`Sales Director     33455.013     11576.985        0.062     2.890    0.004     10759.869    56150.156 
+                `Job Title`Sales Executive     -2945.057     11823.114       -0.004    -0.249    0.803    -26122.703    20232.589 
+                  `Job Title`Sales Manager     21454.290     11587.854        0.039     1.851    0.064     -1262.161    44170.741 
+           `Job Title`Sales Representative     -8004.790     11491.638       -0.016    -0.697    0.486    -30532.620    14523.041 
+                      `Job Title`Scientist     16912.029     19402.909        0.006     0.872    0.383    -21124.799    54948.857 
+           `Job Title`Social Media Manager      -911.428     12588.226       -0.001    -0.072    0.942    -25588.975    23766.119 
+        `Job Title`Social Media Specialist    -10009.376     19362.830       -0.003    -0.517    0.605    -47967.635    27948.883 
+             `Job Title`Software Developer      2634.802     11318.323        0.008     0.233    0.816    -19553.268    24822.872 
+              `Job Title`Software Engineer     45161.545     11211.635        0.281     4.028    0.000     23182.621    67140.468 
+      `Job Title`Software Engineer Manager     36299.231     11303.871        0.160     3.211    0.001     14139.491    58458.971 
+            `Job Title`Training Specialist    -19145.762     19364.884       -0.007    -0.989    0.323    -57108.047    18816.524 
+                    `Job Title`UX Designer     20642.232     17100.579        0.009     1.207    0.227    -12881.185    54165.648 
+                  `Job Title`Web Developer      -478.455     11372.605       -0.001    -0.042    0.966    -22772.938    21816.028 
+----------------------------------------------------------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<p>Unsurprisingly, the summary has chosen the variables that I had highlighted in the original model. Interestingly, this model scraps Gender, Race, and Country; it does not consider them strong enough to influence the model.</p>
+<p>Now that we’ve figured out the ideal variables for the model, let’s create a new model to see if we can improve the accuracy by removing unnecessary predictors:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>step_fit <span class="ot">&lt;-</span> </span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lm</span>(Salary <span class="sc">~</span> Age <span class="sc">+</span> <span class="st">`</span><span class="at">Education Level</span><span class="st">`</span> <span class="sc">+</span></span>
+<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">`</span><span class="at">Years of Experience</span><span class="st">`</span> <span class="sc">+</span> Senior <span class="sc">+</span> </span>
+<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">`</span><span class="at">Job Title</span><span class="st">`</span>, <span class="at">data =</span> training)</span>
+<span id="cb108-5"><a href="#cb108-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(step_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Salary ~ Age + `Education Level` + `Years of Experience` + 
+    Senior + `Job Title`, data = training)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-128339  -11606     -19   11049   64618 
+
+Coefficients:
+                                            Estimate Std. Error t value
+(Intercept)                                 30716.00   11627.37   2.642
+Age                                            50.23     127.91   0.393
+`Education Level`                            6732.57     600.19  11.217
+`Years of Experience`                        5383.39     158.14  34.041
+Senior                                     -11342.17    1279.06  -8.868
+`Job Title`Accountant                       -2030.78   14428.08  -0.141
+`Job Title`Administrative Assistant        -37782.60   19361.43  -1.951
+`Job Title`Back end Developer               28725.88   11287.64   2.545
+`Job Title`Business Analyst                  8702.63   12423.98   0.700
+`Job Title`Business Development Associate   -8286.94   14998.06  -0.553
+`Job Title`Business Development Manager     25678.88   15815.13   1.624
+`Job Title`Business Operations Analyst     -11980.22   24992.39  -0.479
+`Job Title`Content Marketing Manager        20767.82   11546.37   1.799
+`Job Title`Copywriter                       -9863.62   19359.29  -0.510
+`Job Title`Customer Service Manager        -23509.65   19374.21  -1.213
+`Job Title`Customer Service Representative -10610.91   14435.36  -0.735
+`Job Title`Data Analyst                     53822.85   11249.31   4.785
+`Job Title`Data Engineer                    27059.08   15853.63   1.707
+`Job Title`Data Scientist                   54103.62   11276.36   4.798
+`Job Title`Delivery Driver                  -3921.43   15815.50  -0.248
+`Job Title`Digital Marketing Manager        13153.35   11660.14   1.128
+`Job Title`Digital Marketing Specialist      4693.30   12783.38   0.367
+`Job Title`Director of Data Science         60109.13   11692.59   5.141
+`Job Title`Director of Engineering          25165.97   19397.06   1.297
+`Job Title`Director of Finance              20715.00   19388.33   1.068
+`Job Title`Director of HR                    8795.82   11568.96   0.760
+`Job Title`Director of Human Resources      18956.35   19402.71   0.977
+`Job Title`Director of Marketing            24725.47   11506.89   2.149
+`Job Title`Director of Operations           12403.58   13281.34   0.934
+`Job Title`Engineer                          7809.96   19398.39   0.403
+`Job Title`Event Coordinator               -20922.56   24989.69  -0.837
+`Job Title`Financial Advisor                15829.35   15004.16   1.055
+`Job Title`Financial Analyst                18598.19   11647.39   1.597
+`Job Title`Financial Manager                44377.13   11362.62   3.906
+`Job Title`Front end Developer              22518.50   11286.76   1.995
+`Job Title`Front End Developer              18169.17   11901.86   1.527
+`Job Title`Full Stack Engineer              34510.24   11272.50   3.061
+`Job Title`Graphic Designer                   136.76   12300.20   0.011
+`Job Title`HR Coordinator                   -9218.07   12077.20  -0.763
+`Job Title`HR Generalist                     -363.42   11413.37  -0.032
+`Job Title`HR Manager                        7507.96   15816.57   0.475
+`Job Title`Human Resources Coordinator     -10540.04   11653.24  -0.904
+`Job Title`Human Resources Manager          14942.51   11339.32   1.318
+`Job Title`IT Consultant                    26801.88   25007.14   1.072
+`Job Title`IT Support Specialist            -5312.17   19362.19  -0.274
+`Job Title`Juniour HR Coordinator           -5329.93   19364.92  -0.275
+`Job Title`Juniour HR Generalist              110.88   17080.02   0.006
+`Job Title`Manager                          23933.76   19397.75   1.234
+`Job Title`Marketing Analyst                 7369.47   11350.63   0.649
+`Job Title`Marketing Coordinator             8399.05   11329.68   0.741
+`Job Title`Marketing Director               64299.46   11565.51   5.560
+`Job Title`Marketing Manager                17219.58   11272.54   1.528
+`Job Title`Marketing Specialist              4657.90   13224.71   0.352
+`Job Title`Operations Analyst               -4767.97   13687.02  -0.348
+`Job Title`Operations Coordinator           19438.15   17079.75   1.138
+`Job Title`Operations Manager               13701.25   11385.74   1.203
+`Job Title`Product Designer                  5665.83   11482.78   0.493
+`Job Title`Product Manager                  56370.65   11265.38   5.004
+`Job Title`Product Marketing Manager        27274.54   11561.05   2.359
+`Job Title`Project Coordinator               5564.46   15020.13   0.370
+`Job Title`Project Engineer                 51955.49   11300.74   4.598
+`Job Title`Project Manager                  25138.45   11834.59   2.124
+`Job Title`Receptionist                     -6902.11   11613.33  -0.594
+`Job Title`Recruiter                       -22129.10   17073.70  -1.296
+`Job Title`Research Director                50460.95   11592.20   4.353
+`Job Title`Research Scientist               41874.13   11458.07   3.655
+`Job Title`Sales Associate                  -8786.43   11302.47  -0.777
+`Job Title`Sales Director                   33529.17   11571.74   2.898
+`Job Title`Sales Executive                  -2961.62   11821.95  -0.251
+`Job Title`Sales Manager                    21486.89   11586.09   1.855
+`Job Title`Sales Representative             -7988.43   11490.50  -0.695
+`Job Title`Scientist                        16994.22   19398.19   0.876
+`Job Title`Social Media Manager              -973.72   12584.42  -0.077
+`Job Title`Social Media Specialist         -10080.43   19358.91  -0.521
+`Job Title`Software Developer                2644.85   11317.33   0.234
+`Job Title`Software Engineer                45185.67   11210.26   4.031
+`Job Title`Software Engineer Manager        36333.11   11302.04   3.215
+`Job Title`Training Specialist             -19228.44   19360.12  -0.993
+`Job Title`UX Designer                      20565.25   17096.06   1.203
+`Job Title`Web Developer                     -467.46   11371.60  -0.041
+                                           Pr(&gt;|t|)    
+(Intercept)                                 0.00827 ** 
+Age                                         0.69459    
+`Education Level`                           &lt; 2e-16 ***
+`Years of Experience`                       &lt; 2e-16 ***
+Senior                                      &lt; 2e-16 ***
+`Job Title`Accountant                       0.88807    
+`Job Title`Administrative Assistant         0.05105 .  
+`Job Title`Back end Developer               0.01096 *  
+`Job Title`Business Analyst                 0.48366    
+`Job Title`Business Development Associate   0.58060    
+`Job Title`Business Development Manager     0.10450    
+`Job Title`Business Operations Analyst      0.63170    
+`Job Title`Content Marketing Manager        0.07213 .  
+`Job Title`Copywriter                       0.61042    
+`Job Title`Customer Service Manager         0.22501    
+`Job Title`Customer Service Representative  0.46233    
+`Job Title`Data Analyst                    1.76e-06 ***
+`Job Title`Data Engineer                    0.08791 .  
+`Job Title`Data Scientist                  1.64e-06 ***
+`Job Title`Delivery Driver                  0.80418    
+`Job Title`Digital Marketing Manager        0.25934    
+`Job Title`Digital Marketing Specialist     0.71353    
+`Job Title`Director of Data Science        2.82e-07 ***
+`Job Title`Director of Engineering          0.19454    
+`Job Title`Director of Finance              0.28537    
+`Job Title`Director of HR                   0.44711    
+`Job Title`Director of Human Resources      0.32861    
+`Job Title`Director of Marketing            0.03169 *  
+`Job Title`Director of Operations           0.35039    
+`Job Title`Engineer                         0.68725    
+`Job Title`Event Coordinator                0.40249    
+`Job Title`Financial Advisor                0.29147    
+`Job Title`Financial Analyst                0.11037    
+`Job Title`Financial Manager               9.51e-05 ***
+`Job Title`Front end Developer              0.04608 *  
+`Job Title`Front End Developer              0.12692    
+`Job Title`Full Stack Engineer              0.00221 ** 
+`Job Title`Graphic Designer                 0.99113    
+`Job Title`HR Coordinator                   0.44534    
+`Job Title`HR Generalist                    0.97460    
+`Job Title`HR Manager                       0.63503    
+`Job Title`Human Resources Coordinator      0.36578    
+`Job Title`Human Resources Manager          0.18763    
+`Job Title`IT Consultant                    0.28387    
+`Job Title`IT Support Specialist            0.78382    
+`Job Title`Juniour HR Coordinator           0.78314    
+`Job Title`Juniour HR Generalist            0.99482    
+`Job Title`Manager                          0.21731    
+`Job Title`Marketing Analyst                0.51620    
+`Job Title`Marketing Coordinator            0.45852    
+`Job Title`Marketing Director              2.82e-08 ***
+`Job Title`Marketing Manager                0.12667    
+`Job Title`Marketing Specialist             0.72469    
+`Job Title`Operations Analyst               0.72758    
+`Job Title`Operations Coordinator           0.25513    
+`Job Title`Operations Manager               0.22888    
+`Job Title`Product Designer                 0.62173    
+`Job Title`Product Manager                 5.78e-07 ***
+`Job Title`Product Marketing Manager        0.01835 *  
+`Job Title`Project Coordinator              0.71105    
+`Job Title`Project Engineer                4.36e-06 ***
+`Job Title`Project Manager                  0.03370 *  
+`Job Title`Receptionist                     0.55232    
+`Job Title`Recruiter                        0.19499    
+`Job Title`Research Director               1.37e-05 ***
+`Job Title`Research Scientist               0.00026 ***
+`Job Title`Sales Associate                  0.43696    
+`Job Title`Sales Director                   0.00378 ** 
+`Job Title`Sales Executive                  0.80219    
+`Job Title`Sales Manager                    0.06371 .  
+`Job Title`Sales Representative             0.48694    
+`Job Title`Scientist                        0.38103    
+`Job Title`Social Media Manager             0.93833    
+`Job Title`Social Media Specialist          0.60259    
+`Job Title`Software Developer               0.81523    
+`Job Title`Software Engineer               5.63e-05 ***
+`Job Title`Software Engineer Manager        0.00131 ** 
+`Job Title`Training Specialist              0.32065    
+`Job Title`UX Designer                      0.22905    
+`Job Title`Web Developer                    0.96721    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 22350 on 5884 degrees of freedom
+Multiple R-squared:  0.8227,    Adjusted R-squared:  0.8203 
+F-statistic: 345.6 on 79 and 5884 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Unfortunately, Rsq remained nearly the same. However, one saving grace of the tune is that we were able to slightly reduce residual standard error and increase our F-statistic, so it may not look like it at first glance, but the model is still stronger than our initial attempt, even if only slightly.</p>
+<p>Now that we’ve tuned our model, let us visualize the predictions.</p>
+<p>This first plot depicts the average predicted value of Salary at each age in the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">effect_plot</span>(step_fit, <span class="at">pred =</span> Age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As we can see, this shows a very strong correlation between salary and age.</p>
+<p>This second plot once again depicts salary vs age, but this time plots the residual values along with showing the confidence interval of which the model operates. We can see most of our residuals lie within the interval, although there are a few outliers at both ends.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">effect_plot</span>(step_fit, <span class="at">pred =</span> Age, <span class="at">interval =</span> <span class="cn">TRUE</span>, <span class="at">partial.residuals =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="tree-methods" class="level2">
+<h2 class="anchored" data-anchor-id="tree-methods">Tree Methods:</h2>
+<p>For our second model, we want to use the power of Tree methods to see if it could give us a better answer to our main question than multiple linear regression. We will be mainly focusing on the Decision Tree method, but we will also create a Random Forest tree for comparison.</p>
+<section id="decision-tree" class="level3">
+<h3 class="anchored" data-anchor-id="decision-tree">Decision Tree:</h3>
+<p>As we learned from class, we know that decision trees can mirror human decision-making more than other methods. We want to try to put this to the test to create a decision tree model based on our salary data to see if it can accurately predict an employee’s salary using binary decision-making.</p>
+<p>To begin, we will make an untidy decision tree to visualize the decision-making process the model will take to determine salary.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Non-tidy way (for visualization purposes)</span></span>
+<span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a>tree_fit <span class="ot">&lt;-</span> <span class="fu">rpart</span>(Salary <span class="sc">~</span>., <span class="at">data =</span> train)</span>
+<span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb112-4"><a href="#cb112-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(tree_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final-Project_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see from this output that Years of Experience and job titles are very influential in decision-making. To be able to print this tree without having tens of job names crowd out the actual Boolean expression, we coded the job title to be a numeric value and factorized it, so while it’s a bit harder to understand what is happening, the lower a job title’s value is, the less money the position makes. Back to the tree, we can see that the longer someone works, the more money they will earn, and there are no questions about what position they will hold; they will still earn more money due to their experience. However, when we go down the tree in the opposite direction (meaning an employee has less experience), their position starts to play a more pivotal role.</p>
+<p>Below we can see the decision tree model fitted onto the testing data. We can also see the predicted values compared to the actual salary values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>tree_fit_2 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(Salary <span class="sc">~</span>., <span class="at">data =</span> training)</span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a>tree_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(tree_fit_2, <span class="at">newdata =</span> testing) <span class="sc">%&gt;%</span></span>
+<span id="cb113-3"><a href="#cb113-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(testing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+• `` -&gt; `...1`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>tree_preds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 663 × 10
+     ...1   Age Gender `Education Level` `Job Title`       `Years of Experience`
+    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt; &lt;chr&gt;                             &lt;dbl&gt;
+ 1 37293.    24 Male                   0 Sales Associate                       1
+ 2 37293.    28 Female                 0 Sales Associate                       1
+ 3 37293.    30 Female                 0 Sales Associate                       1
+ 4 37293.    21 Female                 0 Sales Representa…                     0
+ 5 37293.    21 Female                 0 Sales Representa…                     0
+ 6 37293.    24 Female                 0 Receptionist                          0
+ 7 37293.    24 Female                 0 Receptionist                          0
+ 8 37293.    24 Female                 0 Receptionist                          0
+ 9 37293.    24 Female                 0 Receptionist                          0
+10 37293.    24 Female                 0 Receptionist                          0
+# ℹ 653 more rows
+# ℹ 4 more variables: Salary &lt;dbl&gt;, Country &lt;chr&gt;, Race &lt;chr&gt;, Senior &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>While the predictions appear to be fairly accurate to the actual values, we can see that the model is not good at predicting small changes within similar records. Therefore, we need to tune for it to factor in these smaller changes into the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tidy way + tuning   </span></span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>tree_model <span class="ot">&lt;-</span> <span class="fu">decision_tree</span>(<span class="at">mode =</span> <span class="st">"regression"</span>,</span>
+<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">cost_complexity =</span> <span class="fu">tune</span>(),</span>
+<span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">tree_depth =</span> <span class="fu">tune</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"rpart"</span>)</span>
+<span id="cb117-6"><a href="#cb117-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-7"><a href="#cb117-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-8"><a href="#cb117-8" aria-hidden="true" tabindex="-1"></a>data_recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(Salary <span class="sc">~</span>., training)</span>
+<span id="cb117-9"><a href="#cb117-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-10"><a href="#cb117-10" aria-hidden="true" tabindex="-1"></a>wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb117-11"><a href="#cb117-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(data_recipe) <span class="sc">%&gt;%</span></span>
+<span id="cb117-12"><a href="#cb117-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(tree_model)</span>
+<span id="cb117-13"><a href="#cb117-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-14"><a href="#cb117-14" aria-hidden="true" tabindex="-1"></a>tree_grid <span class="ot">&lt;-</span> <span class="fu">grid_regular</span>(<span class="fu">cost_complexity</span>(),</span>
+<span id="cb117-15"><a href="#cb117-15" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">tree_depth</span>(),</span>
+<span id="cb117-16"><a href="#cb117-16" aria-hidden="true" tabindex="-1"></a>                          <span class="at">levels =</span> <span class="dv">5</span>)</span>
+<span id="cb117-17"><a href="#cb117-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-18"><a href="#cb117-18" aria-hidden="true" tabindex="-1"></a>cv_samples <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(training)</span>
+<span id="cb117-19"><a href="#cb117-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-20"><a href="#cb117-20" aria-hidden="true" tabindex="-1"></a>tree_tune <span class="ot">&lt;-</span> wf <span class="sc">%&gt;%</span></span>
+<span id="cb117-21"><a href="#cb117-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
+<span id="cb117-22"><a href="#cb117-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> cv_samples,</span>
+<span id="cb117-23"><a href="#cb117-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid</span>
+<span id="cb117-24"><a href="#cb117-24" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb117-25"><a href="#cb117-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-26"><a href="#cb117-26" aria-hidden="true" tabindex="-1"></a>best_tree <span class="ot">&lt;-</span> tree_tune <span class="sc">%&gt;%</span></span>
+<span id="cb117-27"><a href="#cb117-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_best</span>(<span class="at">metric =</span> <span class="st">"rmse"</span>)</span>
+<span id="cb117-28"><a href="#cb117-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-29"><a href="#cb117-29" aria-hidden="true" tabindex="-1"></a>final_wf <span class="ot">&lt;-</span> wf <span class="sc">%&gt;%</span></span>
+<span id="cb117-30"><a href="#cb117-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">finalize_workflow</span>(best_tree)</span>
+<span id="cb117-31"><a href="#cb117-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb117-32"><a href="#cb117-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-33"><a href="#cb117-33" aria-hidden="true" tabindex="-1"></a>final_wf <span class="sc">%&gt;%</span></span>
+<span id="cb117-34"><a href="#cb117-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">last_fit</span>(salary_split) <span class="sc">%&gt;%</span></span>
+<span id="cb117-35"><a href="#cb117-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_metrics</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  .metric .estimator .estimate .config             
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard   10533.    Preprocessor1_Model1
+2 rsq     standard       0.960 Preprocessor1_Model1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a>tuned_tree_preds <span class="ot">&lt;-</span> final_wf <span class="sc">%&gt;%</span></span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">last_fit</span>(salary_split) <span class="sc">%&gt;%</span></span>
+<span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(testing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+• `Salary` -&gt; `Salary...4`
+• `Salary` -&gt; `Salary...11`</code></pre>
+</div>
+</div>
+<p>As we can see from the output of the tuned decision tree above, we get an r-squared value of .958, which is an incredible accuracy considering decision trees often suffer from low predictive power. However, our RMSE value is at a staggering 10491.67, so our outliers are heavily impacting the model in a negative way, which is usually the case for Decision Trees.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a>tuned_tree_preds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 663 × 14
+    .pred id              .row Salary...4 .config   Age Gender `Education Level`
+    &lt;dbl&gt; &lt;chr&gt;          &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;
+ 1 30667. train/test sp…    15      25000 Prepro…    24 Male                   0
+ 2 26310. train/test sp…    22      25000 Prepro…    28 Female                 0
+ 3 26310. train/test sp…    42      25000 Prepro…    30 Female                 0
+ 4 25136. train/test sp…    45      25000 Prepro…    21 Female                 0
+ 5 25136. train/test sp…    56      25000 Prepro…    21 Female                 0
+ 6 25136. train/test sp…    99      25000 Prepro…    24 Female                 0
+ 7 25136. train/test sp…   107      25000 Prepro…    24 Female                 0
+ 8 25136. train/test sp…   111      25000 Prepro…    24 Female                 0
+ 9 25136. train/test sp…   126      25000 Prepro…    24 Female                 0
+10 25136. train/test sp…   128      25000 Prepro…    24 Female                 0
+# ℹ 653 more rows
+# ℹ 6 more variables: `Job Title` &lt;chr&gt;, `Years of Experience` &lt;dbl&gt;,
+#   Salary...11 &lt;dbl&gt;, Country &lt;chr&gt;, Race &lt;chr&gt;, Senior &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Looking at our predicted values now, we can see that the model is way more accurate at factoring in slight differences between similar employees. Overall, this tuned regression decision tree does a really good job of making accurate predictions.</p>
+</section>
+<section id="random-forest-tree" class="level3">
+<h3 class="anchored" data-anchor-id="random-forest-tree">Random Forest Tree:</h3>
+<p>For comparison, let us look at this Random Forest Tree</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a>rf_model <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_engine</span>(<span class="st">"ranger"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb123-3"><a href="#cb123-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_mode</span>(<span class="st">"regression"</span>)</span>
+<span id="cb123-4"><a href="#cb123-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-5"><a href="#cb123-5" aria-hidden="true" tabindex="-1"></a><span class="co"># workflow</span></span>
+<span id="cb123-6"><a href="#cb123-6" aria-hidden="true" tabindex="-1"></a>rf_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb123-7"><a href="#cb123-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_model</span>(rf_model) <span class="sc">%&gt;%</span> </span>
+<span id="cb123-8"><a href="#cb123-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_recipe</span>(data_recipe)</span>
+<span id="cb123-9"><a href="#cb123-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-10"><a href="#cb123-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the regression tree</span></span>
+<span id="cb123-11"><a href="#cb123-11" aria-hidden="true" tabindex="-1"></a>rf_fit <span class="ot">&lt;-</span> rf_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(training)</span>
+<span id="cb123-12"><a href="#cb123-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-13"><a href="#cb123-13" aria-hidden="true" tabindex="-1"></a><span class="co"># predict</span></span>
+<span id="cb123-14"><a href="#cb123-14" aria-hidden="true" tabindex="-1"></a>testing<span class="sc">$</span>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_fit, testing)<span class="sc">$</span>.pred</span>
+<span id="cb123-15"><a href="#cb123-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-16"><a href="#cb123-16" aria-hidden="true" tabindex="-1"></a><span class="co"># metrics</span></span>
+<span id="cb123-17"><a href="#cb123-17" aria-hidden="true" tabindex="-1"></a>testing <span class="sc">%&gt;%</span> <span class="fu">metrics</span>(Salary, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard   11885.   
+2 rsq     standard       0.952
+3 mae     standard    7964.   </code></pre>
+</div>
+</div>
+<p>The Random Forest tree did ever so slightly worse than the tuned decision tree model, but it still is very accurate at predicting salary.</p>
+</section>
+</section>
+<section id="ridge-regression" class="level2">
+<h2 class="anchored" data-anchor-id="ridge-regression">Ridge Regression:</h2>
+<p>We chose ridge regression as our final model in the hopes that we could reduce the high amount of variance in our data to create an even more accurate model than our tuned Decision Tree.</p>
+<p>Let us start with a ridge model that we manually assign the penalties for. Let us use a manual penalty of 4 for the estimate. We must also center and scale all of our predictors to standardize them before we fit the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a>ridge_recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> train) <span class="sc">%&gt;%</span></span>
+<span id="cb125-2"><a href="#cb125-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_center</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb125-3"><a href="#cb125-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_scale</span>(<span class="fu">all_nominal_predictors</span>())</span>
+<span id="cb125-4"><a href="#cb125-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb125-5"><a href="#cb125-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb125-6"><a href="#cb125-6" aria-hidden="true" tabindex="-1"></a>ridge_model <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">mixture =</span> <span class="dv">0</span>, <span class="at">penalty =</span> .<span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb125-7"><a href="#cb125-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span>
+<span id="cb125-8"><a href="#cb125-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb125-9"><a href="#cb125-9" aria-hidden="true" tabindex="-1"></a>ridge_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb125-10"><a href="#cb125-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(ridge_recipe) <span class="sc">%&gt;%</span></span>
+<span id="cb125-11"><a href="#cb125-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(ridge_model) <span class="sc">%&gt;%</span></span>
+<span id="cb125-12"><a href="#cb125-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(train)</span>
+<span id="cb125-13"><a href="#cb125-13" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_fit_parsnip</span>(ridge_wf) <span class="sc">%&gt;%</span> <span class="fu">tidy</span>(<span class="at">penalty =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 3
+  term                estimate penalty
+  &lt;chr&gt;                  &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)          38827.        4
+2 Age                    293.        4
+3 Gender                5830.        4
+4 Education Level      15021.        4
+5 Job Title             -114.        4
+6 Years of Experience   5034.        4
+7 Country               -345.        4
+8 Race                   -71.2       4
+9 Senior               -4810.        4</code></pre>
+</div>
+</div>
+<p>From the output of the model, we can tell that it is not very accurate at all. The estimated values are extremely far away from zero.</p>
+<p>Now, let us try tuning the model to see if we can improve the accuracy of the ridge regression.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TUNING</span></span>
+<span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span><span class="fu">vfold_cv</span>(train)</span>
+<span id="cb127-3"><a href="#cb127-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb127-4"><a href="#cb127-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">mixture =</span> <span class="dv">0</span>, <span class="at">penalty =</span> <span class="fu">tune</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb127-5"><a href="#cb127-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span>
+<span id="cb127-6"><a href="#cb127-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb127-7"><a href="#cb127-7" aria-hidden="true" tabindex="-1"></a>tuned_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb127-8"><a href="#cb127-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(ridge_recipe) <span class="sc">%&gt;%</span></span>
+<span id="cb127-9"><a href="#cb127-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(ridge_model)</span>
+<span id="cb127-10"><a href="#cb127-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb127-11"><a href="#cb127-11" aria-hidden="true" tabindex="-1"></a>ridge_grid <span class="ot">&lt;-</span> <span class="fu">grid_regular</span>(<span class="fu">mixture</span>(), <span class="fu">penalty</span>(), <span class="at">levels =</span> <span class="dv">10</span>)</span>
+<span id="cb127-12"><a href="#cb127-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb127-13"><a href="#cb127-13" aria-hidden="true" tabindex="-1"></a>tuned_grid <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(tuned_wf, <span class="at">resamples =</span> folds, <span class="at">grid =</span> ridge_grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: No tuning parameters have been detected, performance will be evaluated
+using the resamples with no tuning. Did you want to [tune()] parameters?</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a>tuned_grid <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>() <span class="sc">%&gt;%</span> <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"rmse"</span>) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 6
+  .metric .estimator   mean     n std_err .config             
+  &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard   29001.    10    359. Preprocessor1_Model1</code></pre>
+</div>
+</div>
+<p>The RMSE is almost three times larger than our decision tree model. It appears this model is not accurate at all at predicting salary.</p>
+<p>Before we make any assumptions, let us take a look at the predictions</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a>tuned_grid <span class="sc">%&gt;%</span> </span>
+<span id="cb131-2"><a href="#cb131-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select_best</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb131-3"><a href="#cb131-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">finalize_workflow</span>(tuned_wf, .) <span class="sc">%&gt;%</span> </span>
+<span id="cb131-4"><a href="#cb131-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">last_fit</span>(ridge_split) <span class="sc">%&gt;%</span> </span>
+<span id="cb131-5"><a href="#cb131-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collect_predictions</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in select_best(.): No value of `metric` was given; "rmse" will be used.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 663 × 5
+    .pred id                .row Salary .config             
+    &lt;dbl&gt; &lt;chr&gt;            &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt;               
+ 1 53233. train/test split    10  25000 Preprocessor1_Model1
+ 2 48988. train/test split    12  25000 Preprocessor1_Model1
+ 3 50212. train/test split    33  25000 Preprocessor1_Model1
+ 4 50489. train/test split    34  25000 Preprocessor1_Model1
+ 5 50557. train/test split    35  25000 Preprocessor1_Model1
+ 6 42141. train/test split    55  25000 Preprocessor1_Model1
+ 7 42711. train/test split    59  25000 Preprocessor1_Model1
+ 8 43567. train/test split    69  25000 Preprocessor1_Model1
+ 9 43421. train/test split    71  25000 Preprocessor1_Model1
+10 43027. train/test split    75  25000 Preprocessor1_Model1
+# ℹ 653 more rows</code></pre>
+</div>
+</div>
+<p>Our tuned ridge regression model overestimates salary for every employee. It is now safe to say that this model is the least accurate out of the three that we have created today.</p>
+</section>
+</section>
+<section id="comparison" class="level1">
+<h1>Comparison:</h1>
+<p>To compare our models, our decision tree by far did the best, as we have previously stated, but our multiple linear regression model was still respectable, being able to predict accurately within 82% of the data. Now for the ridge regression model. Our ridge regression model was not accurate even after being scaled, centered, and tuned. We are led to believe that this may have been due to the extremely large variance within the dataset.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion:</h1>
+<p>In conclusion, we were able to answer all of our questions after analyzing and modeling the data.</p>
+<p>Starting with our minor questions:</p>
+<ul>
+<li><p>Women do, in fact, get paid less than men; while men do have lower-paying jobs than women, on average their jobs are likely to pay less than a man’s.</p></li>
+<li><p>Age does play a large role in how much an employee earns. experience and age go hand in hand with one another, as you are going to gain experience as you age (unless you are unemployed or start work later than the average person). Still, being older in your field almost certainly leads to better pay. We did find, however, that 60-year-olds make about the same as 50-year-olds do on average. So do not anticipate a pay raise heading into your pre-retirement years</p></li>
+<li><p>Having a senior-level position does indeed lead to a pay increase on average, and while we found a handful of outliers under 30, most employees in a senior-level position were older than this mark.</p></li>
+<li><p>Having a higher level of education does lead to a higher salary, and quite significantly so. We would hope this would be the case considering the amount of time and resources it takes to get each higher level of education.</p></li>
+<li><p>No, you do not need to move to another country to get a better wage. While there may be other reasons (such as benefits) to entice you to move abroad, salary should not be one of them.</p></li>
+</ul>
+<p>To finish off this project, let us answer our main question: Can we accurately predict the salary of an employee given the predictors from the dataset?</p>
+<p>The answer to this question is yes. Using a tuned decision tree model we were able to achieve an accuracy of 95% on our testing data. The model is not entirely perfect, but it is certainly good for the fact that it is predicting using regression, which is extremely hard to achieve good accuracy for.</p>
+<p>To say the accuracy of our decision tree was a surprise would be an understatement. Considering the relatively small amount of variables within the data set we thought we would not be able to accurately predict salary, so to create such an accurate model was a pleasant surprise for us.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
